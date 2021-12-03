@@ -1,5 +1,5 @@
 .treePage {
-    background-color: #36393F;
+    background-color: #454950;
     min-height: 100vh;
     font-family: "Whitney";
 }
@@ -10,15 +10,15 @@
 }
 
 .treeHeader {
-    width: 170px;
-    background-color: #26282C;
+    width: 190px;
+    background-color: #36393D;
     border-radius: 10px;
     height: 50px;
     padding: 15px;
     margin: 20px auto;
     line-height: 0px;
     cursor: pointer;
-    box-shadow: 0 1px 1px 0 #2F3136;
+    box-shadow: 0 1px 1px 0 #36393D;
     display: flex;
 }
 
@@ -30,16 +30,37 @@
     margin: auto;
 }
 
+.treeNodeArea {
+    width: 300px;
+}
+
 .treeNode {
     width: 200px;
-    background-color: #26282C;
+    background-color: #36393D;
     border-radius: 10px;
-    height: 50px;
-    margin: 0 50px;
-    line-height: 10px;
+    height: 30px;
+    font-size: 18px;
+    margin: auto;
     cursor: pointer;
-    box-shadow: 0 1px 1px 0 #2F3136;
+    font-weight: bold;
+    box-shadow: 0 1px 1px 0 #36393D;
+    padding: 10px;
     position: relative;
+    transition: all .3s ease;
+    overflow: hidden;
+}
+
+.treeNodeText {
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+}
+
+.treeNodeTopic {
+    margin-top: 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
 }
 
 .treeNodeIcon {
@@ -51,5 +72,46 @@
 .treeLevel {
     display: flex;
     justify-content: center;
-    margin: 0 0 50px 0;
+    margin: 0;
+}
+
+.treeNodeTopRow,
+.treeNodeBottomRow {
+    display: flex;
+}
+
+.treeNodeTopRowBox,
+.treeNodeBottomRowBox {
+    height: 50px;
+    width: 50%;
+    border-left: 3px solid #4565EF;
+    border-right: 3px solid #4565EF;
+}
+
+.treeNodeTopRowBox {
+    border-top: 6px solid #4565EF;
+}
+
+.treeNodeTopRowBox:first-child,
+.treeNodeBottomRow > div:first-child {
+    border-left: none;
+    border-right: 3px solid #4565EF;
+}
+
+.treeNodeTopRowBox:last-child,
+.treeNodeBottomRow > div:last-child {
+    border-left: 3px solid #4565EF;
+    border-right: none;
+}
+
+.treeNodeContainer:first-child > .treeNodeArea > .treeNodeTopRow > .treeNodeTopRowBox:first-child {
+    border-bottom: none;
+    border-top: none;
+    height: 56px;
+}
+
+.treeNodeContainer:last-child > .treeNodeArea > .treeNodeTopRow > .treeNodeTopRowBox:last-child {
+    border-bottom: none;
+    border-top: none;
+    height: 56px;
 }

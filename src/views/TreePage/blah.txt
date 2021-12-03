@@ -17,7 +17,7 @@ interface ITreeNode {
     children: ITreeNode[];
 }
 
-function TreeNode({ name, topics, children, first }: ITreeNode & { first?: boolean }) {
+function TreeNode({ name, topics, children }: ITreeNode) {
     const [opened, setOpened] = useState(false);
 
     const levels: ITreeNode[][] = [];
@@ -36,22 +36,10 @@ function TreeNode({ name, topics, children, first }: ITreeNode & { first?: boole
 
     console.log(levels);
 
-    const widthNeeded = (node: ITreeNode): number => {
-        if (node.children.length >= 2) {
-            return node.children.reduce((acc, cur) => acc + widthNeeded(cur), 0)
-        } else {
-            return 300;
-        }
-    };
+    const childWidth = levels.reduce((acc, cur) => acc > cur.length ? acc : cur.length, 0);
 
-    console.log(widthNeeded({ name, topics, children }));
-
-    return <div className="treeNodeArea" style={{ width: widthNeeded({ name, topics, children }) }}>
-        { first && <div className="treeNodeTopRow">
-            <div className="treeNodeTopRowBox"></div>
-            <div className="treeNodeTopRowBox"></div>
-        </div> }
-        <div className="treeNode" style={{ height: opened ? topics.length === 0 ? 30 : topics.slice(0, 4).length * 40 + 30 : 30}}>
+    return <div className="treeNodeArea" style={{ width: 300 * childWidth - 100 }}>
+        <div className={`treeNode${opened ? " expanded" : ""}`}>
             <h3 className="treeNodeText">{ name }</h3>
             <div onClick={() => setOpened(!opened)}>
                 <Icon
@@ -62,19 +50,14 @@ function TreeNode({ name, topics, children, first }: ITreeNode & { first?: boole
                 />
             </div>
             {
-                opened && topics.slice(0, 3).map(topic => (
+                opened && topics.map(topic => (
                     <div key={`treeNodeTopic${topic}`} className="treeNodeTopic">{topic}</div>
                 ))
             }
             {
-                opened && topics.length > 3 && <div className="treeNodeTopic" style={{ color: "#4565EF" }}>See all...</div>
+                opened && <div className="treeNodeTopic" style={{ color: "#4565EF" }}>See all...</div>
             }
         </div>
-        { children.length !== 0 && <div className="treeNodeBottomRow">
-            <div className="treeNodeBottomRowBox"></div>
-            <div className="treeNodeBottomRowBox"></div>
-        </div>}
-        <TreeLevel firstLevel={false} contents={children} />
     </div>
 }
 
@@ -83,7 +66,15 @@ function TreeLevel({ contents, firstLevel }: { contents: ITreeNode[], firstLevel
         {
             contents.map(j => (
                 <div className="treeNodeContainer">
-                    <TreeNode {...j} first={!firstLevel} />
+                    { !firstLevel && <div className="treeNodeTopRow">
+                        <div className="treeNodeTopRowBox"></div>
+                        <div className="treeNodeTopRowBox"></div>
+                    </div>}
+                    <TreeNode {...j} />
+                    { j.children.length !== 0 && <div className="treeNodeBottomRow">
+                        <div className="treeNodeBottomRowBox"></div>
+                        <div className="treeNodeBottomRowBox"></div>
+                    </div>}
                 </div>
             ))
         }
@@ -102,13 +93,7 @@ export default function TreePage() {
                     {
                         name: "Geometry",
                         children: [],
-                        topics: [
-                            "Triangles",
-                            "Circles",
-                            "Quadrilaterals",
-                            "Ellipses",
-                            "Cones"
-                        ],
+                        topics: [],
                     },
                     {
                         name: "Algebra",
@@ -116,7 +101,7 @@ export default function TreePage() {
                             {
                                 name: "Algebra II",
                                 children: [],
-                                topics: ["Cubic functions"]
+                                topics: []
                             },
                             {
                                 name: "Trigonometry",
@@ -164,7 +149,130 @@ export default function TreePage() {
                 <img src={tree.image} alt="TreeImage" />
                 <h3>{tree.name}</h3>
             </div>
-            <TreeLevel firstLevel={true} contents={levels[0]} />
+            { levels.map((contents, idx) => <TreeLevel firstLevel={idx === 0} contents={contents} />)}
         </div>
     </div>
+}
+
+.treePage {
+    background-color: #454950;
+    min-height: 100vh;
+    font-family: "Whitney";
+}
+
+.landingPageLogo > img {
+    margin-top: 50px;
+    width: 400px;
+}
+
+.treeHeader {
+    width: 190px;
+    background-color: #36393D;
+    border-radius: 10px;
+    height: 50px;
+    padding: 15px;
+    margin: 20px auto;
+    line-height: 0px;
+    cursor: pointer;
+    box-shadow: 0 1px 1px 0 #36393D;
+    display: flex;
+}
+
+.treeHeader > img {
+    height: 50px;
+}
+
+.treeHeader > h3 {
+    margin: auto;
+}
+
+.treeNodeArea {
+    width: 200px;
+    margin: 0 50px;
+}
+
+.treeNode {
+    width: 200px;
+    background-color: #36393D;
+    border-radius: 10px;
+    height: 30px;
+    font-size: 18px;
+    margin: auto;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 1px 1px 0 #36393D;
+    padding: 10px;
+    position: relative;
+    transition: all .3s ease;
+    overflow: hidden;
+}
+
+.treeNode.expanded {
+    height: 190px;
+}
+
+.treeNodeText {
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+}
+
+.treeNodeTopic {
+    margin-top: 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+}
+
+.treeNodeIcon {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+}
+
+.treeLevel {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+.treeNodeTopRow,
+.treeNodeBottomRow {
+    display: flex;
+}
+
+.treeNodeTopRow > div,
+.treeNodeBottomRow > div {
+    height: 50px;
+    width: 50%;
+    border-left: 3px solid #4565EF;
+    border-right: 3px solid #4565EF;
+}
+
+.treeNodeTopRow > div {
+    border-top: 6px solid #4565EF;
+}
+
+.treeNodeTopRow > div:first-child,
+.treeNodeBottomRow > div:first-child {
+    border-left: none;
+    border-right: 3px solid #4565EF;
+}
+
+.treeNodeTopRow > div:last-child,
+.treeNodeBottomRow > div:last-child {
+    border-left: 3px solid #4565EF;
+    border-right: none;
+}
+
+.treeNodeContainer:first-child .treeNodeTopRowBox:first-child {
+    border-bottom: none;
+    border-top: none;
+    height: 56px;
+}
+
+.treeNodeContainer:last-child .treeNodeTopRowBox:last-child {
+    border-bottom: none;
+    border-top: none;
+    height: 56px;
 }
