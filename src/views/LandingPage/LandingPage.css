@@ -1,0 +1,65 @@
+.landingPage {
+    background-color: #36393F;
+    min-height: 100vh;
+    font-family: "Whitney";
+}
+
+.landingPageLogo > img {
+    margin-top: 50px;
+    width: 400px;
+}
+
+.landingPageCheckOutButton {
+    background-color: blue;
+    width: 200px;
+    border-radius: 10px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: auto;
+    box-shadow: 0px 3px 5px 0px black;
+}
+
+.landingPageModule {
+    width: 300px;
+    background-color: #202225;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.landingPageModuleName {
+    text-align: left;
+    display: block;
+    font-size: 30px;
+    margin: 0 0 10px 0;
+}
+
+.landingPageModuleRow {
+    display: flex;
+    justify-content: space-around;
+}
+
+.landingPageModuleRow img {
+    height: 75px;
+}
+
+.landingPageModuleDesc {
+    font-size: 14px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.landingPageModuleDesc p {
+    text-align: left;
+    margin: 0;
+}
+
+.landingPageModuleDescLink {
+    color: blue;
+    text-decoration: none;
+    text-align: right;
+    font-weight: bold;
+}
