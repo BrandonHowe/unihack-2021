@@ -170,3 +170,34 @@
 .examContentTreeNodeConnector:last-child {
     border-left: 3px solid #4565EF;
 }
+
+.solutionModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.solutionModalContent {
+    background-color: #44484F;
+    width: 600px;
+    border-radius: 20px;
+    text-align: left;
+    padding: 20px 30px;
+}
+
+.solutionModalContent h2 {
+    margin: 0;
+    display: flex;
+}
+
+.closeButton {
+    margin-left: auto;
+    display: inline-block;
+    cursor: pointer;
+}

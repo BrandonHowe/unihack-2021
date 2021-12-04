@@ -4,6 +4,10 @@ import { MouseEventHandler, useRef, useState } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import { findNodeByName, flatten } from "../../helpers";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import ReactMarkdown from "react-markdown";
+import RemarkMathPlugin from 'remark-math';
+import rehypeKatex from "rehype-katex";
+import 'katex/dist/katex.min.css';
 
 interface Question {
     x: number;
@@ -11,28 +15,41 @@ interface Question {
     width: number;
     height: number;
     topic: ITreeNode;
+    solution: string;
 }
 
+const p3Solution = `
+Given: $\\log _{4} {(x^2 + 1)} = \\log _{4}{x} + \\log _{4} {(x + 1)}$
+
+Combine terms on the right: $\\log _{4} {(x^2 + 1)} = \\log _{4}{(x^2 + x)}$
+
+Remove log: $x^2 + 1 = x^2 + x$
+
+Move terms onto one side: $-x + 1 = 0$
+
+Solve for x: $x = 1$
+`
+
 const questions: Question[] = [
-    { x: 58, y: 170, width: 289, height: 21, topic: findNodeByName("Complex numbers")! },
-    { x: 58, y: 192, width: 476, height: 42, topic: findNodeByName("Quadratics")! },
-    { x: 58, y: 234, width: 407, height: 21, topic: findNodeByName("Logarithms")! },
-    { x: 58, y: 255, width: 476, height: 37, topic: findNodeByName("Quadratics")! },
-    { x: 58, y: 292, width: 476, height: 37, topic: findNodeByName("Linear Equations")! },
-    { x: 58, y: 329, width: 368, height: 33, topic: findNodeByName("Trigonometry")! },
-    { x: 68, y: 387, width: 457, height: 50, topic: findNodeByName("Matrices")! },
-    { x: 58, y: 437, width: 158, height: 20, topic: findNodeByName("Determinants")! },
-    { x: 58, y: 457, width: 440, height: 23, topic: findNodeByName("Matrices")! },
-    { x: 58, y: 480, width: 336, height: 20, topic: findNodeByName("Matrices")! },
-    { x: 58, y: 505, width: 473, height: 28, topic: findNodeByName("Limits")! },
-    { x: 58, y: 533, width: 128, height: 15, topic: findNodeByName("Limits")! },
-    { x: 58, y: 548, width: 406, height: 14, topic: findNodeByName("Limits")! },
-    { x: 58, y: 562, width: 351, height: 23, topic: findNodeByName("Quadratics")! },
-    { x: 68, y: 608, width: 270, height: 27, topic: findNodeByName("Rational functions")! },
-    { x: 58, y: 635, width: 214, height: 42, topic: findNodeByName("Limits")! },
-    { x: 58, y: 673, width: 371, height: 19, topic: findNodeByName("Limits")! },
-    { x: 58, y: 692, width: 430, height: 51, topic: findNodeByName("Derivatives")! },
-    { x: 58, y: 743, width: 204, height: 37, topic: findNodeByName("Integrals")! },
+    { x: 58, y: 170, width: 289, height: 21, solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
+    { x: 58, y: 192, width: 476, height: 42, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+    { x: 58, y: 234, width: 407, height: 21, solution: p3Solution, topic: findNodeByName("Logarithms")! },
+    { x: 58, y: 255, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+    { x: 58, y: 292, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Linear Equations")! },
+    { x: 58, y: 329, width: 368, height: 33, solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
+    { x: 68, y: 387, width: 457, height: 50, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+    { x: 58, y: 437, width: 158, height: 20, solution: "just solve it rofl", topic: findNodeByName("Determinants")! },
+    { x: 58, y: 457, width: 440, height: 23, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+    { x: 58, y: 480, width: 336, height: 20, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+    { x: 58, y: 505, width: 473, height: 28, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+    { x: 58, y: 533, width: 128, height: 15, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+    { x: 58, y: 548, width: 406, height: 14, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+    { x: 58, y: 562, width: 351, height: 23, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+    { x: 68, y: 608, width: 270, height: 27, solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
+    { x: 58, y: 635, width: 214, height: 42, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+    { x: 58, y: 673, width: 371, height: 19, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+    { x: 58, y: 692, width: 430, height: 51, solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
+    { x: 58, y: 743, width: 204, height: 37, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
 ];
 
 const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: number, width: number, height: number }) => {
@@ -47,6 +64,7 @@ export default function ExamPage() {
     const [_, setNumPages] = useState<unknown>(null);
     const [pageNumber, __] = useState(1);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+    const [solutionOpen, setSolutionOpen] = useState(false);
 
     const documentRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +122,7 @@ export default function ExamPage() {
             <h2>Additional help</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Euismod nisi porta lorem mollis aliquam ut porttitor. Placerat vestibulum lectus mauris ultrices eros in cursus. Nunc consequat interdum varius sit amet. Vitae congue mauris rhoncus aenean vel elit. Quam adipiscing vitae proin sagittis. Aliquam malesuada bibendum arcu vitae elementum curabitur. Pellentesque dignissim enim sit amet venenatis urna cursus eget nunc. Tristique risus nec feugiat in. Id interdum velit laoreet id. Massa sed elementum tempus egestas sed sed risus pretium quam. Neque ornare aenean euismod elementum nisi. Orci porta non pulvinar neque laoreet suspendisse interdum. Sit amet massa vitae tortor condimentum lacinia quis.</p>
             <div className="examContentButton">Check out similar exercises</div>
-            <div className="examContentButton">See solution to this problem</div>
+            <div className="examContentButton" onClick={() => setSolutionOpen(true)}>See solution to this problem</div>
             <h2>Knowledge tree</h2>
             <div className="examContentKnowledgeTree">
                 { doubleParentNode && <>
@@ -130,5 +148,11 @@ export default function ExamPage() {
                 </div> }
             </div>
         </div>
+        { solutionOpen && <div className="solutionModal" id="solutionModal" onClick={e => { if ((e.target as any).id === "solutionModal") setSolutionOpen(false) }}>
+            <div className="solutionModalContent">
+                <h2 style={{ textAlign: "center" }}><span style={{ marginLeft: "auto" }}>Solution to problem</span> <span className="closeButton" onClick={() => setSolutionOpen(false)}>X</span></h2>
+                <ReactMarkdown children={selectedQuestion?.solution || ""} remarkPlugins={[RemarkMathPlugin]} rehypePlugins={[rehypeKatex]}></ReactMarkdown>
+            </div>
+        </div> }
     </div>
 }
