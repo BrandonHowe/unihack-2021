@@ -11,6 +11,8 @@ import NewUserPage from './views/NewUser/NewUser';
 import Exercises from './views/Exercises/Exercises';
 import TreeNodePage from './views/TreeNodePage/TreeNodePage';
 import ModuleQuiz from './views/ModuleQuiz/ModuleQuiz';
+import DifficultExercises from './views/DifficultExercises/DifficultExercises';
+import SimilarExercises from './views/SimilarExercises/SimilarExercises';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/moduleQuiz/:id" element={<ModuleQuiz />}></Route>
           <Route path="/exam/:id" element={<ExamPage />}></Route>
           <Route path="/newUser" element={<NewUserPage />}></Route>
+          <Route path="/difficultProblems" element={<DifficultExercises />}></Route>
+          <Route path="/similarExercises" element={<SimilarExercises />}></Route>
         </Routes>
     </div>
   );

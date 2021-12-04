@@ -1,5 +1,6 @@
 .finishQuiz {
     background-color: #627BF3;
+    box-shadow: 0 2px 7px 0 #292B2F;
     width: 200px;
     border-radius: 10px;
     height: 50px;

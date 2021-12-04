@@ -2,7 +2,7 @@ import "./ExamPage.css";
 import { ITreeNode, tree } from "../TreePage/TreePage";
 import { MouseEventHandler, useRef, useState } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
-import { findNodeByName, findParentNode, flatten } from "../../helpers";
+import { findNodeByName, findParentNode } from "../../helpers";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ReactMarkdown from "react-markdown";
 import RemarkMathPlugin from 'remark-math';
@@ -11,8 +11,9 @@ import 'katex/dist/katex.min.css';
 import { Link, useParams } from "react-router-dom";
 import Markdown from "../../components/Markdown/Markdown";
 import LoremIpsum from "../Article/LoremIpsum";
-import { mdiChevronDown, mdiChevronLeft, mdiChevronRight } from "@mdi/js";
+import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 import Icon from "@mdi/react";
+import ObservableSlim from "observable-slim";
 
 interface Question {
     x: number;
@@ -37,7 +38,7 @@ Move terms onto one side: $-x + 1 = 0$
 Solve for x: $x = 1$
 `
 
-const initialQuestions: Question[][][] = [
+const initialQuestions: Question[][][] = localStorage.getItem("questions") ? JSON.parse(localStorage.getItem("questions")!) : [
     [
         [
             { x: 78, y: 170, width: 269, height: 21, solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
@@ -113,9 +114,9 @@ export default function ExamPage() {
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
     const [solutionOpen, setSolutionOpen] = useState(false);
     const [showDifficulty, setShowDifficulty] = useState(false);
-    const [showDifficultExercises, setShowDifficultExercises] = useState(false);
-    const [questions, setQuestions] = useState(initialQuestions);
-    const [exerciseImageSrc, setExerciseImageSrc] = useState("");
+    const [questions, setQuestions] = useState(ObservableSlim.create(initialQuestions, true, function(changes) {
+        localStorage.setItem("questions", JSON.stringify(initialQuestions));
+    }));
 
     const documentRef = useRef<HTMLDivElement>(null);
 
@@ -138,7 +139,7 @@ export default function ExamPage() {
     const questionDifficulty = (difficulty: number | undefined) => {
         console.log(selectedQuestion, difficulty);
         if (selectedQuestion) {
-            if (difficulty === undefined || isNaN(difficulty)) {
+            if (difficulty === undefined || isNaN(difficulty) || difficulty === -1) {
                 delete selectedQuestion.difficulty;
                 delete questions[Number(id) - 1][pageNumber - 1].find(l => l.y === selectedQuestion.y)!.difficulty;
             } else {
@@ -176,10 +177,8 @@ export default function ExamPage() {
                 canvas2.width = question.width;
                 canvas2.height = question.height;
                 canvas2.getContext('2d')!.drawImage(canvas, question.x, question.y, question.width, question.height, 0,0,question.width, question.height);
-                const result = canvas2.toDataURL()
-                console.log(result);
+                const result = canvas2.toDataURL();
                 question.image = result;
-                setExerciseImageSrc(result);
                 
                 const tempImg = document.createElement('img')
                 tempImg.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml"><style>em{color:red;}</style><em>I</em> lick <span>cheese</span></div></foreignObject></svg>')
@@ -228,8 +227,8 @@ export default function ExamPage() {
                 { selectedQuestion && showDifficulty && <div style={{ position: "absolute", zIndex: 100, left: selectedQuestion.x + selectedQuestion.width + 10, top: selectedQuestion.y, width: 270, backgroundColor: "#292B2F", padding: 5, borderRadius: 5, textAlign: "left" }}>
                     <label htmlFor="questionDifficulty">Question difficulty</label>
                     <br />
-                    <select style={{ width: 270, margin: "10px 0 0 0" }} id="questionDifficulty" value={selectedQuestion?.difficulty} onChange={e => { questionDifficulty(Number(e.target.value) ?? undefined); setShowDifficulty(false) }}>
-                        <option value={undefined}>I did not solve the problem yet</option>
+                    <select style={{ width: 270, margin: "10px 0 0 0" }} id="questionDifficulty" value={selectedQuestion?.difficulty ?? -1} onChange={e => { questionDifficulty(Number(e.target.value) ?? undefined); setShowDifficulty(false) }}>
+                        <option value={-1}>I did not solve the problem yet</option>
                         <option value={0}>I couldn't solve the problem</option>
                         <option value={1}>I solved the problem with difficulty</option>
                         <option value={2}>I solved the problem with little difficulty</option>
@@ -247,7 +246,7 @@ export default function ExamPage() {
             <div className="examContentButtons">
                 <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>
                 <div className="examContentButton" onClick={() => selectedQuestion && setSolutionOpen(true)}>See solution to this problem</div>
-                <div className="examContentButton" onClick={() => setShowDifficultExercises(true)}>See difficult exercises</div>
+                <Link to="/difficultProblems"><div className="examContentButton">See difficult exercises</div></Link>
             </div>
             <h2>Knowledge tree</h2>
             <div className="examContentKnowledgeTree">
@@ -326,16 +325,6 @@ export default function ExamPage() {
             <div className="solutionModalContent">
                 <h2 style={{ textAlign: "center" }}><span style={{ marginLeft: "auto" }}>Solution to problem</span> <span className="closeButton" onClick={() => setSolutionOpen(false)}>X</span></h2>
                 <ReactMarkdown children={selectedQuestion?.solution || ""} remarkPlugins={[RemarkMathPlugin]} rehypePlugins={[rehypeKatex]}></ReactMarkdown>
-            </div>
-        </div> }
-        { showDifficultExercises && <div className="difficultExercisesModal" id="difficultExercisesModal" onClick={e => { if ((e.target as any).id === "difficultExercisesModal") setShowDifficultExercises(false) }}>
-            <div className="difficultExercisesContent">
-                <h2 style={{ textAlign: "center" }}><span style={{ marginLeft: "auto" }}>Difficult exercises</span> <span className="closeButton" onClick={() => setSolutionOpen(false)}>X</span></h2>
-                <h3 style={{ fontWeight: "normal", fontSize: 16 }}>These are problems that you've found to be extraordinarily challenging across all exams.</h3>
-                { questions.flat().flat().filter(l => l.difficulty === 0).map(l => <div style={{ display: "flex", alignSelf: "center", alignItems: "center", margin: "10px 0" }}>
-                    <img alt="Exercise" src={l.image} />
-                    <h4 style={{ margin: "0 0 0 5px" }}> - {l.topic.name}</h4>
-                </div>) }
             </div>
         </div> }
     </div>

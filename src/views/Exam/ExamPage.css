@@ -238,29 +238,3 @@ a {
     border-radius: 5px;
     margin: 5px auto 0 auto;
 }
-
-.difficultExercisesModal {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.difficultExercisesContent {
-    background-color: #44484F;
-    width: 600px;
-    border-radius: 20px;
-    text-align: left;
-    padding: 20px 30px;
-}
-
-.difficultExercisesContent h2 {
-    margin: 0;
-    display: flex;
-}

@@ -7,7 +7,7 @@ import Markdown from "../../components/Markdown/Markdown";
 import Question from "../../components/Question/Question";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { alphabet, findNodeByName } from "../../helpers";
-import { IQuestion, ITreeNode, tree } from "../TreePage/TreePage";
+import { IQuestion, ITreeNode } from "../TreePage/TreePage";
 import "./ModuleQuiz.css";
 
 function ReviewQuestion({ question, num, answer }: { answer: number, num: number, question: IQuestion & { topic: string } }) {

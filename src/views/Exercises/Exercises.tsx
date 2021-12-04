@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import Question from "../../components/Question/Question";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { findTopicByName } from "../../helpers";
-import { ITopic, IQuestion, ITreeNode } from "../TreePage/TreePage";
+import { ITopic, ITreeNode } from "../TreePage/TreePage";
 import "./Exercises.css";
 
 export default function Exercises() {
@@ -47,6 +47,7 @@ export default function Exercises() {
             <Sidebar />
             <div className="exercisesArea">
                 <h2 style={{ textAlign: "center", fontSize: 36 }}>{ topicData?.name || "Loading " } exercises</h2>
+                <h4 style={{ textAlign: "center", fontSize: 18 }}>Get every problem correct in order to complete this exercise.</h4>
                 { topicData?.questions.map((l, num) => <Question setAnswer={e => { questionsCompleted[num] = l.answerChoices[e].correct; setQuestionsCompleted([...questionsCompleted]) }} data={l} num={num + 1} /> )}
                 <div className={`finishQuiz${questionsCompleted.includes(false) ? " disabled" : ""}`} onClick={() => !questionsCompleted.includes(false) && submit()}>Complete exercise</div>
             </div>

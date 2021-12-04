@@ -4,7 +4,7 @@ import Icon from '@mdi/react';
 import { mdiCheck, mdiChevronDown, mdiCircleHalfFull, mdiSchool } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useEffect, useRef, useState } from "react";
-import { findNodeByName, findParentNode, flatten, genRandomArticle } from "../../helpers";
+import { findParentNode, flatten, genRandomArticle } from "../../helpers";
 import ArcArticle from "./ArcArticle";
 import { Link } from "react-router-dom";
 import ObservableSlim from "observable-slim";
@@ -417,8 +417,43 @@ const treeRaw: ITree = grabFromLS() || {
                                             name: "Exponentials",
                                             description: "",
                                             category: treeCategories[3],
-                                            quizQuestions: [],
-                                            topics: [],
+                                            quizQuestions: [
+                                                {
+                                                    topic: "Variables in two exponents",
+                                                    question: "Solve $3^{x^2 - 3x + 12} = 9^{x + 3}$",
+                                                    points: 2,
+                                                    answerChoices: [
+                                                        {
+                                                            content: "$x = 2, 3$",
+                                                            correct: true,
+                                                            explanation: ""
+                                                        },
+                                                        {
+                                                            content: "$x = 1, 4$",
+                                                            correct: false,
+                                                            explanation: ""
+                                                        },
+                                                        {
+                                                            content: "$x = 3$",
+                                                            correct: false,
+                                                            explanation: ""
+                                                        },
+                                                        {
+                                                            content: "$x = \\dfrac{1}{2}, 3$",
+                                                            correct: false,
+                                                            explanation: ""
+                                                        },
+                                                    ]
+                                                }
+                                            ],
+                                            topics: [
+                                                {
+                                                    name: "Variables in two exponents",
+                                                    questions: [],
+                                                    article: "Solve them bro",
+                                                    complete: false
+                                                }
+                                            ],
                                             children: [
                                                 {
                                                     name: "Logarithms",
@@ -432,7 +467,14 @@ const treeRaw: ITree = grabFromLS() || {
                                                             description: "",
                                                             category: treeCategories[3],
                                                             quizQuestions: [],
-                                                            topics: [],
+                                                            topics: [
+                                                                {
+                                                                    name: "Variables in the denominator",
+                                                                    questions: [],
+                                                                    article: "Solve them bro",
+                                                                    complete: false
+                                                                }
+                                                            ],
                                                             children: [
                                                                 {
                                                                     name: "Limits",
