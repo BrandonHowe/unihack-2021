@@ -4,6 +4,7 @@ import Icon from '@mdi/react';
 import { mdiChevronDown } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useState } from "react";
+import LoremIpsum from "../Article/LoremIpsum";
 
 export interface ITree {
     name: string;
@@ -11,10 +12,15 @@ export interface ITree {
     nodes: ITreeNode[];
 }
 
+export interface ITopic {
+    name: string;
+    article: string;
+}
+
 export interface ITreeNode {
     name: string;
     category?: ITreeCategory;
-    topics: string[]
+    topics: ITopic[]
     children: ITreeNode[];
     complete: boolean;
 }
@@ -48,6 +54,21 @@ const treeCategories: ITreeCategory[] = [
     }
 ]
 
+const genRandomArticle = () => {
+    const paras = LoremIpsum.split("\n\n");
+
+    let shuffled = paras
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+    return shuffled.join("\n\n");
+}
+
+const genTopic = (name: string): ITopic => {
+    return { name, article: genRandomArticle() };
+}
+
 export const tree: ITree = {
     name: "Mathematics",
     image: knowledge,
@@ -56,7 +77,7 @@ export const tree: ITree = {
             name: "Linear Equations",
             complete: false,
             category: treeCategories[0],
-            topics: ["Variables on one side", "Variables on both sides", "Unknown coefficients", "Solving inequalities", "Graphing linear equations"],
+            topics: [genTopic("Variables on one side"), genTopic("Variables on both sides"), genTopic("Unknown coefficients"), genTopic("Solving inequalities"), genTopic("Graphing linear equations")],
             children: [
                 {
                     name: "Geometry",
@@ -70,24 +91,24 @@ export const tree: ITree = {
                         }
                     ],
                     topics: [
-                        "Triangles",
-                        "Circles",
-                        "Quadrilaterals",
-                        "Ellipses",
-                        "Cones"
+                        genTopic("Triangles"),
+                        genTopic("Circles"),
+                        genTopic("Quadrilaterals"),
+                        genTopic("Ellipses"),
+                        genTopic("Cones")
                     ],
                 },
                 {
                     name: "Systems of Equations",
                     complete: false,
                     category: treeCategories[0],
-                    topics: ["Solving systems with substitution", "Solving systems with elimination", "Number of solutions of systems", "Graphing systems of equations"],
+                    topics: [genTopic("Solving systems with substitution"), genTopic("Solving systems with elimination"), genTopic("Number of solutions of systems"), genTopic("Graphing systems of equations")],
                     children: [
                         {
                             name: "Factoring",
                             complete: false,
                             category: treeCategories[1],
-                            topics: ["Distributive property", "Factoring by grouping", "Difference of squares", "Perfect squares", "Factoring quadratics"],
+                            topics: [genTopic("Distributive property"), genTopic("Factoring by grouping"), genTopic("Difference of squares"), genTopic("Perfect squares"), genTopic("Factoring quadratics")],
                             children: [
                                 {
                                     name: "Quadratics",

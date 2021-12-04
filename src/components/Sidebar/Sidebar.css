@@ -1,0 +1,85 @@
+.sidebarOverview {
+    width: 300px;
+    margin: 20px;
+    height: calc(100vh - 40px);
+    border-radius: 20px;
+    background-color: #36393D;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+}
+
+.sidebarLogo {
+    width: 250px;
+    padding: 25px;
+    background-color: #36393D;
+    border-radius: 20px;
+}
+
+.sidebarLogo img {
+    width: 250px;
+}
+
+.sidebarField {
+    width: 250px;
+    padding: 25px;
+    height: 70px;
+    display: flex;
+    align-content: center;
+    background-color: #36393D;
+}
+
+.sidebarField img {
+    height: 70px;
+    margin-right: 20px;
+}
+
+.sidebarField h3 {
+    margin: 0;
+    line-height: 50px;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.sidebarTopicList {
+    overflow: hidden;
+    transition: all .3s ease;
+    background-color: #303135;
+}
+
+.sidebarTopicListHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    height: 30px;
+    position: relative;
+    cursor: pointer;
+    background-color: #36393D;
+    user-select: none;
+}
+
+.sidebarTopicListHeader h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebarTopicListIcon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    transition: transform .3s ease;
+}
+
+.sidebarTopicListIcon.upsideDown {
+    transform: rotate(180deg);
+}
+
+.sidebarTopic {
+    height: 50px;
+    line-height: 50px;
+    text-align: left;
+    padding-left: 40px;
+    text-decoration: none;
+    color: inherit;
+}

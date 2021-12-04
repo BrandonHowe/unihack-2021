@@ -7,6 +7,7 @@ import Icon from "@mdi/react";
 import { mdiChevronDown } from "@mdi/js";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import { findNodeByName, flatten } from "../../helpers";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 interface Question {
     x: number;
@@ -104,35 +105,7 @@ export default function ExamPage() {
     console.log(flattenedNodes);
 
     return <div className="examPage">
-        <div className="examPageOverview">
-            <div className="examPageLogo">
-                <img src={logo} alt="KnowledgeTree logo" />
-            </div>
-            <div className="examPageField">
-                <img src={math} alt="Knowledge" />
-                <h3>Mathematics</h3>
-            </div>
-            <div className="examPageTopicList" style={{ height: examListOpen ? 160 : 60 }}>
-                <div className="examPageTopicListHeader" onClick={() => setExamListOpen(!examListOpen)}>
-                    <h3>Exam models</h3>
-                    <Icon
-                        path={mdiChevronDown}
-                        size={1}
-                        color="#929292"
-                        className={`examPageTopicListIcon${examListOpen ? " upsideDown" : ""}`}
-                    />
-                </div>
-                { examListOpen && <>
-                    <div className="examPageTopic">
-                        Bac M1
-                    </div>
-                    <div className="examPageTopic">
-                        Bac M2
-                    </div>
-                </> }
-            </div>
-            { flattenedNodes.map(l => <ExamPageTopicList node={l} />) }
-        </div>
+        <Sidebar />
         <div className="examPreview">
             <div ref={documentRef} style={{ borderRadius: 20, position: "relative" }} onClick={handleDocumentClick}>
                 <Document onLoadSuccess={onDocumentLoadSuccess} file="https://profesorjitaruionel.com/wp-content/uploads/2021/06/E_c_matematica_M_mate-info_2021_var_02_LRO.pdf">

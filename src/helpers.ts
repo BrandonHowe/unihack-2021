@@ -30,7 +30,7 @@ export const findNodeByName = (name: string, node: ITreeNode = tree.nodes[0]): I
 };
 
 export const findTopicByName = (name: string, node: ITreeNode = tree.nodes[0]): ITreeNode | undefined => {
-    if (node.topics.includes(name)) {
+    if (node.topics.some(l => l.name === name)) {
         return node;
     }
     if (!node.children.length) {
