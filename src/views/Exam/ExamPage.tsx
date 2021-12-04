@@ -9,6 +9,8 @@ import RemarkMathPlugin from 'remark-math';
 import rehypeKatex from "rehype-katex";
 import 'katex/dist/katex.min.css';
 import { Link } from "react-router-dom";
+import Markdown from "../../components/Markdown/Markdown";
+import LoremIpsum from "../Article/LoremIpsum";
 
 interface Question {
     x: number;
@@ -17,6 +19,7 @@ interface Question {
     height: number;
     topic: ITreeNode;
     solution: string;
+    difficulty?: number;
 }
 
 const p3Solution = `
@@ -31,7 +34,7 @@ Move terms onto one side: $-x + 1 = 0$
 Solve for x: $x = 1$
 `
 
-const questions: Question[] = [
+const initialQuestions: Question[] = [
     { x: 58, y: 170, width: 289, height: 21, solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
     { x: 58, y: 192, width: 476, height: 42, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
     { x: 58, y: 234, width: 407, height: 21, solution: p3Solution, topic: findNodeByName("Logarithms")! },
@@ -53,6 +56,8 @@ const questions: Question[] = [
     { x: 58, y: 743, width: 204, height: 37, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
 ];
 
+const emojiDifficulties = ["😭", "😢", "🙂", "😁"];
+
 const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: number, width: number, height: number }) => {
     if (point.x < rect.x) return false;
     if (point.y < rect.y) return false;
@@ -66,8 +71,24 @@ export default function ExamPage() {
     const [pageNumber, __] = useState(1);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
     const [solutionOpen, setSolutionOpen] = useState(false);
+    const [questions, setQuestions] = useState(initialQuestions);
 
     const documentRef = useRef<HTMLDivElement>(null);
+
+    const questionDifficulty = (difficulty: number | undefined) => {
+        console.log(selectedQuestion, difficulty);
+        if (selectedQuestion) {
+            if (difficulty === undefined || isNaN(difficulty)) {
+                delete selectedQuestion.difficulty;
+                delete questions.find(l => l.y === selectedQuestion.y)!.difficulty;
+            } else {
+                selectedQuestion.difficulty = difficulty;
+                questions.find(l => l.y === selectedQuestion.y)!.difficulty = difficulty;
+            }
+            setQuestions([...questions]);
+            setSelectedQuestion({...selectedQuestion});
+        }
+    };
 
     function onDocumentLoadSuccess({ numPages }: { numPages: unknown }) {
         setNumPages(numPages);
@@ -107,7 +128,7 @@ export default function ExamPage() {
 
     const flattenedNodes: ITreeNode[] = flatten(tree.nodes[0]);
     
-    console.log(flattenedNodes);
+    console.log(questions);
 
     return <div className="examPage">
         <Sidebar />
@@ -117,11 +138,14 @@ export default function ExamPage() {
                     <Page pageNumber={pageNumber} />
                 </Document>
                 { selectedQuestion && <div style={{ position: "absolute", left: selectedQuestion.x, top: selectedQuestion.y, width: selectedQuestion.width, height: selectedQuestion.height, backgroundColor: "rgba(177, 185, 249, 0.5)", borderRadius: 7 }}></div> }
+                { questions.filter(l => l.difficulty !== undefined).map(l => <span style={{ position: "absolute", left: l.x - 20, top: l.y, color: "black" }}>{emojiDifficulties[l.difficulty || 0]}</span>) }
             </div>
         </div>
         <div className="examContent">
             <h2>Additional help</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Euismod nisi porta lorem mollis aliquam ut porttitor. Placerat vestibulum lectus mauris ultrices eros in cursus. Nunc consequat interdum varius sit amet. Vitae congue mauris rhoncus aenean vel elit. Quam adipiscing vitae proin sagittis. Aliquam malesuada bibendum arcu vitae elementum curabitur. Pellentesque dignissim enim sit amet venenatis urna cursus eget nunc. Tristique risus nec feugiat in. Id interdum velit laoreet id. Massa sed elementum tempus egestas sed sed risus pretium quam. Neque ornare aenean euismod elementum nisi. Orci porta non pulvinar neque laoreet suspendisse interdum. Sit amet massa vitae tortor condimentum lacinia quis.</p>
+            <div style={{ overflowY: "auto", maxHeight: "calc(100vh - 700px)" }}>
+                <Markdown content={LoremIpsum} />
+            </div>
             <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>
             <div className="examContentButton" onClick={() => setSolutionOpen(true)}>See solution to this problem</div>
             <h2>Knowledge tree</h2>
@@ -154,6 +178,16 @@ export default function ExamPage() {
                     </div>
                 </Link> }
             </div>
+            <h2>Question options</h2>
+            <label htmlFor="questionDifficulty">Question difficulty</label>
+            <br />
+            <select id="questionDifficulty" value={selectedQuestion?.difficulty} onChange={e => questionDifficulty(Number(e.target.value) ?? undefined)}>
+                <option value={undefined}>I did not solve the problem yet</option>
+                <option value={0}>I couldn't solve the problem</option>
+                <option value={1}>I solved the problem with difficulty</option>
+                <option value={2}>I solved the problem with little difficulty</option>
+                <option value={3}>I could solve the problem easily</option>
+            </select>
         </div>
         { solutionOpen && <div className="solutionModal" id="solutionModal" onClick={e => { if ((e.target as any).id === "solutionModal") setSolutionOpen(false) }}>
             <div className="solutionModalContent">

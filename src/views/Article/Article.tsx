@@ -8,6 +8,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import 'katex/dist/katex.min.css';
 import RemarkMathPlugin from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { Helmet } from "react-helmet";
 
 interface Article {
     title: string;
@@ -33,6 +34,9 @@ export function ArticlePage() {
     }, [id]);
 
     return <div className="articlePage">
+        <Helmet>
+            <title>{ articleContent?.title || "KnowledgeTree" }</title>
+        </Helmet>
         <div className="examPage">
             <Sidebar />
             <div className="mainArticle">

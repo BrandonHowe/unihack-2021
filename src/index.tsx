@@ -4,9 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 ReactDOM.render(
   <React.StrictMode>
+    <Helmet>
+      <meta
+        name="description"
+        content="Learn and study more effectively with KnowledgeTreeasdfasdfasdf."
+      />
+    </Helmet>
     <Router>
       <App />
     </Router>
