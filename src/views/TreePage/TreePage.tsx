@@ -4,9 +4,9 @@ import Icon from '@mdi/react';
 import { mdiChevronDown } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useState } from "react";
-import LoremIpsum from "../Article/LoremIpsum";
 import { genRandomArticle } from "../../helpers";
 import ArcArticle from "./ArcArticle";
+import { Link } from "react-router-dom";
 
 export interface ITree {
     name: string;
@@ -17,6 +17,19 @@ export interface ITree {
 export interface ITopic {
     name: string;
     article: string;
+    questions: ITopicQuestion[];
+}
+
+export interface IAnswerChoice {
+    content: string;
+    explanation: string;
+    correct: boolean;
+}
+
+export interface ITopicQuestion {
+    question: string;
+    points: number;
+    answerChoices: IAnswerChoice[];
 }
 
 export interface ITreeNode {
@@ -57,7 +70,7 @@ const treeCategories: ITreeCategory[] = [
 ]
 
 const genTopic = (name: string): ITopic => {
-    return { name, article: genRandomArticle() };
+    return { name, article: genRandomArticle(), questions: [] };
 }
 
 export const tree: ITree = {
@@ -82,9 +95,92 @@ export const tree: ITree = {
                         }
                     ],
                     topics: [
+                        {
+                            name: "Arcs and sectors",
+                            article: ArcArticle,
+                            questions: [
+                                {
+                                    question: "How many radians are in a circle?",
+                                    points: 2,
+                                    answerChoices: [
+                                        {
+                                            content: "360",
+                                            correct: false,
+                                            explanation: "There are 360 degrees in a circle, not 360 radians."
+                                        },
+                                        {
+                                            content: "2pi",
+                                            correct: true,
+                                            explanation: ""
+                                        },
+                                        {
+                                            content: "pi",
+                                            correct: false,
+                                            explanation: "Pi radians is only half a circle. The whole circle has 2pi radians."
+                                        },
+                                        {
+                                            content: "1",
+                                            correct: false,
+                                            explanation: "You are just plain stupid if you chose this one rofl"
+                                        }
+                                    ]
+                                },
+                                {
+                                    question: "How many radians are in a circle?",
+                                    points: 2,
+                                    answerChoices: [
+                                        {
+                                            content: "360",
+                                            correct: false,
+                                            explanation: "There are 360 degrees in a circle, not 360 radians."
+                                        },
+                                        {
+                                            content: "2pi",
+                                            correct: true,
+                                            explanation: ""
+                                        },
+                                        {
+                                            content: "pi",
+                                            correct: false,
+                                            explanation: "Pi radians is only half a circle. The whole circle has 2pi radians."
+                                        },
+                                        {
+                                            content: "1",
+                                            correct: false,
+                                            explanation: "You are just plain stupid if you chose this one rofl"
+                                        }
+                                    ]
+                                },
+                                {
+                                    question: "How many degrees are in a circle?",
+                                    points: 1,
+                                    answerChoices: [
+                                        {
+                                            content: "360",
+                                            correct: true,
+                                            explanation: ""
+                                        },
+                                        {
+                                            content: "2pi",
+                                            correct: false,
+                                            explanation: "There are 2pi radians in a circle, not degrees."
+                                        },
+                                        {
+                                            content: "pi",
+                                            correct: false,
+                                            explanation: "Pi radians is only half a circle. The whole circle has 2pi radians which is equivalent to 360 degrees."
+                                        },
+                                        {
+                                            content: "1",
+                                            correct: false,
+                                            explanation: "lmao ok buddy"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
                         genTopic("Triangles"),
                         genTopic("Circles"),
-                        { name: "Arcs and sectors", article: ArcArticle },
                         genTopic("Ellipses"),
                         genTopic("Cones")
                     ],
@@ -238,7 +334,9 @@ function TreeNode({ name, complete, category, topics, children, first }: ITreeNo
             </div>
             {
                 opened && topics.slice(0, 3).map(topic => (
-                    <div key={`treeNodeTopic${topic}`} className="treeNodeTopic">{topic}</div>
+                    <Link to={`/article/${topic.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}>
+                        <div key={`treeNodeTopic${topic.name}`} className="treeNodeTopic">{topic.name}</div>
+                    </Link>
                 ))
             }
             {

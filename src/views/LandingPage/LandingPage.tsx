@@ -24,7 +24,7 @@ export default function LandingPage() {
         </div>
         <h5>Discovr what knowledge you are missing and put it all together. No more barriers or secrets.</h5>
         <h5>The knowledge tree of the world is in your hands.</h5>
-        <div className="landingPageCheckOutButton">Check out our subjects</div>
+        <Link to="/newUser" style={{ textDecoration: "none", color: "inherit" }}><div className="landingPageCheckOutButton">Check out our subjects</div></Link>
         <h5>Or check out our modules directly...</h5>
         <div className="landingPageModuleList">
             <LandingPageModule image={knowledge} name="Mathematics" description="Full curriculum available right now, from Algebra and Geometry to Matrices and Calculus." url="/" />

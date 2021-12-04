@@ -8,6 +8,7 @@ import LandingPage from './views/LandingPage/LandingPage';
 import TreePage from './views/TreePage/TreePage';
 import ExamPage from './views/Exam/ExamPage';
 import NewUserPage from './views/NewUser/NewUser';
+import Exercises from './views/Exercises/Exercises';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/article/:id" element={<ArticlePage />}></Route>
+          <Route path="/exercises/:id" element={<Exercises />}></Route>
           <Route path="/tree" element={<TreePage />}></Route>
           <Route path="/exam/:id" element={<ExamPage />}></Route>
           <Route path="/newUser" element={<NewUserPage />}></Route>
