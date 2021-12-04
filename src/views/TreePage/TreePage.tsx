@@ -1,12 +1,13 @@
 import "./TreePage.css"
 import logo from "../../assets/logo.png";
 import Icon from '@mdi/react';
-import { mdiCheck, mdiChevronDown } from '@mdi/js';
+import { mdiCheck, mdiChevronDown, mdiCircleHalfFull, mdiSchool } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useEffect, useRef, useState } from "react";
 import { findParentNode, flatten, genRandomArticle } from "../../helpers";
 import ArcArticle from "./ArcArticle";
 import { Link } from "react-router-dom";
+import ObservableSlim from "observable-slim";
 
 export interface ITree {
     name: string;
@@ -36,6 +37,7 @@ export interface IQuestion {
 export interface ITreeNode {
     name: string;
     description: string;
+    completedInSchool?: boolean;
     category?: ITreeCategory;
     topics: ITopic[]
     children: ITreeNode[];
@@ -86,7 +88,7 @@ const sinAndCos = {
     children: []
 };
 
-export const tree: ITree = {
+const treeRaw: ITree = localStorage.getItem("tree") ? JSON.parse(localStorage.getItem("tree")!) : {
     name: "Mathematics",
     image: knowledge,
     nodes: [
@@ -449,6 +451,12 @@ export const tree: ITree = {
     ]
 }
 
+export const tree = ObservableSlim.create(treeRaw, true, function(changes) {
+	console.log(JSON.stringify(changes), treeRaw);
+    localStorage.setItem("tree", JSON.stringify(treeRaw));
+});
+
+
 function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode, first?: boolean, elementMap: Record<string, boolean>, setElementMap: (v: Record<string, boolean>) => void }) {
     const { name, category, topics, children, quizScore, quizQuestions } = node;
 
@@ -523,11 +531,11 @@ function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode,
             <div className="treeNodeTopRowBox"></div>
         </div> }
         <div className="treeNode" style={{ height: opened ? topics.length === 0 ? 30 : topics.slice(0, 4).length * 40 + 30 : 30, backgroundColor: category?.color }}>
-            { (node.quizScore || 0) >= 0.8 && <div onClick={() => { elementMap[node.name] = !elementMap[node.name]; setTimeout(() => { setElementMap({...elementMap}); setOpened(!opened) }, 0) }}>
+            { ((node.quizScore || 0) >= 0.8 || node.topics.some(l => l.complete) || node.completedInSchool) && <div onClick={() => { elementMap[node.name] = !elementMap[node.name]; setTimeout(() => { setElementMap({...elementMap}); setOpened(!opened) }, 0) }}>
                 <Icon
-                    path={mdiCheck}
+                    path={node.completedInSchool ? mdiSchool : node.topics.every(l => l.complete) ? mdiCheck : mdiCircleHalfFull}
                     size={1}
-                    color="#55E05E"
+                    color={!node.completedInSchool && node.topics.some(l => l.complete === false) ? "#B7AE45" : "#55E05E"}
                     className="treeNodeCheck"
                 />
             </div> }

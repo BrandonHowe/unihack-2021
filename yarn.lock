@@ -8537,6 +8537,11 @@
     "es-abstract" "^1.18.0-next.1"
     "has" "^1.0.3"
 
+"observable-slim@^0.1.5":
+  "integrity" "sha512-xhDK4EjwM6ehZ6KhTtDc0z5kqBhqoBQPP9pq2n1c+RXA4IcyLIm68ipDwS3nZVXhrCssoKu4LcHDUT1tl0kP9A=="
+  "resolved" "https://registry.npmjs.org/observable-slim/-/observable-slim-0.1.5.tgz"
+  "version" "0.1.5"
+
 "obuf@^1.0.0", "obuf@^1.1.2":
   "integrity" "sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg=="
   "resolved" "https://registry.npmjs.org/obuf/-/obuf-1.1.2.tgz"
