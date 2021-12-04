@@ -9,6 +9,7 @@ import TreePage from './views/TreePage/TreePage';
 import ExamPage from './views/Exam/ExamPage';
 import NewUserPage from './views/NewUser/NewUser';
 import Exercises from './views/Exercises/Exercises';
+import TreeNodePage from './views/TreeNodePage/TreeNodePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/article/:id" element={<ArticlePage />}></Route>
           <Route path="/exercises/:id" element={<Exercises />}></Route>
           <Route path="/tree" element={<TreePage />}></Route>
+          <Route path="/treeSection/:id" element={<TreeNodePage />}></Route>
           <Route path="/exam/:id" element={<ExamPage />}></Route>
           <Route path="/newUser" element={<NewUserPage />}></Route>
         </Routes>

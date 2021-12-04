@@ -17,6 +17,7 @@ export interface ITree {
 export interface ITopic {
     name: string;
     article: string;
+    complete: boolean;
     questions: ITopicQuestion[];
 }
 
@@ -34,10 +35,10 @@ export interface ITopicQuestion {
 
 export interface ITreeNode {
     name: string;
+    description: string;
     category?: ITreeCategory;
     topics: ITopic[]
     children: ITreeNode[];
-    complete: boolean;
 }
 
 export interface ITreeCategory {
@@ -70,7 +71,7 @@ const treeCategories: ITreeCategory[] = [
 ]
 
 const genTopic = (name: string): ITopic => {
-    return { name, article: genRandomArticle(), questions: [] };
+    return { name, article: genRandomArticle(), questions: [], complete: false };
 }
 
 export const tree: ITree = {
@@ -79,17 +80,17 @@ export const tree: ITree = {
     nodes: [
         {
             name: "Linear Equations",
-            complete: false,
+            description: "Solve equations with the variable being raised to the first power.",
             category: treeCategories[0],
             topics: [genTopic("Variables on one side"), genTopic("Variables on both sides"), genTopic("Unknown coefficients"), genTopic("Solving inequalities"), genTopic("Graphing linear equations")],
             children: [
                 {
                     name: "Geometry",
-                    complete: false,
+                    description: "Geometry is the study of shapes and angles. Learn about the different shapes and their mathematical properties.",
                     children: [
                         {
                             name: "Trigonometry",
-                            complete: false,
+                            description: "",
                             children: [],
                             topics: []
                         }
@@ -97,6 +98,7 @@ export const tree: ITree = {
                     topics: [
                         {
                             name: "Arcs and sectors",
+                            complete: false,
                             article: ArcArticle,
                             questions: [
                                 {
@@ -187,30 +189,30 @@ export const tree: ITree = {
                 },
                 {
                     name: "Systems of Equations",
-                    complete: false,
+                    description: "",
                     category: treeCategories[0],
                     topics: [genTopic("Solving systems with substitution"), genTopic("Solving systems with elimination"), genTopic("Number of solutions of systems"), genTopic("Graphing systems of equations")],
                     children: [
                         {
                             name: "Factoring",
-                            complete: false,
+                            description: "",
                             category: treeCategories[1],
                             topics: [genTopic("Distributive property"), genTopic("Factoring by grouping"), genTopic("Difference of squares"), genTopic("Perfect squares"), genTopic("Factoring quadratics")],
                             children: [
                                 {
                                     name: "Quadratics",
-                                    complete: false,
+                                    description: "",
                                     category: treeCategories[1],
                                     topics: [],
                                     children: [
                                         {
                                             name: "Matrices",
-                                            complete: false,
+                                            description: "",
                                             category: treeCategories[3],
                                             children: [
                                                 {
                                                     name: "Determinants",
-                                                    complete: false,
+                                                    description: "",
                                                     category: treeCategories[3],
                                                     topics: [],
                                                     children: []
@@ -220,7 +222,7 @@ export const tree: ITree = {
                                         },
                                         {
                                             name: "Complex numbers",
-                                            complete: false,
+                                            description: "",
                                             category: treeCategories[2],
                                             topics: [],
                                             children: [
@@ -229,41 +231,41 @@ export const tree: ITree = {
                                         },
                                         {
                                             name: "Exponentials",
-                                            complete: false,
+                                            description: "",
                                             category: treeCategories[2],
                                             topics: [],
                                             children: [
                                                 {
                                                     name: "Logarithms",
-                                                    complete: false,
+                                                    description: "",
                                                     category: treeCategories[2],
                                                     topics: [],
                                                     children: [
                                                         { 
                                                             name: "Rational functions",
-                                                            complete: false,
+                                                            description: "",
                                                             category: treeCategories[2],
                                                             topics: [],
                                                             children: [
                                                                 {
                                                                     name: "Sine and cosine",
-                                                                    complete: false,
+                                                                    description: "",
                                                                     category: treeCategories[2],
                                                                     topics: [],
                                                                     children: [
                                                                         {
                                                                             name: "Limits",
-                                                                            complete: false,
+                                                                            description: "",
                                                                             topics: [],
                                                                             children: [
                                                                                 {
                                                                                     name: "Derivatives",
-                                                                                    complete: false,
+                                                                                    description: "",
                                                                                     topics: [],
                                                                                     children: [
                                                                                         {
                                                                                             name: "Integrals",
-                                                                                            complete: false,
+                                                                                            description: "",
                                                                                             topics: [],
                                                                                             children: []
                                                                                         }
@@ -290,8 +292,10 @@ export const tree: ITree = {
     ]
 }
 
-function TreeNode({ name, complete, category, topics, children, first }: ITreeNode & { first?: boolean }) {
+function TreeNode({ name, category, topics, children, first }: ITreeNode & { first?: boolean }) {
     const [opened, setOpened] = useState(false);
+
+    const complete = topics.every(l => l.complete);
 
     const levels: ITreeNode[][] = [];
     let currentLevel = children;
@@ -307,7 +311,7 @@ function TreeNode({ name, complete, category, topics, children, first }: ITreeNo
         nextLevel = [];
     }
 
-    const widthNeeded = (node: Omit<ITreeNode, "complete">): number => {
+    const widthNeeded = (node: Pick<ITreeNode, "children">): number => {
         if (node.children.length >= 2) {
             return node.children.reduce((acc, cur) => acc + widthNeeded(cur), 0)
         } else {
@@ -315,7 +319,7 @@ function TreeNode({ name, complete, category, topics, children, first }: ITreeNo
         }
     };
 
-    const width = widthNeeded({ name, topics, children });
+    const width = widthNeeded({ children });
 
     return <div className="treeNodeArea">
         { first && <div className="treeNodeTopRow">

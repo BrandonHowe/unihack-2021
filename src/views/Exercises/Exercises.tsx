@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { findTopicByName } from "../../helpers";
-import { ITopic, ITopicQuestion, ITreeNode } from "../TreePage/TreePage";
+import { ITopic, ITopicQuestion } from "../TreePage/TreePage";
 import "./Exercises.css";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -55,13 +55,10 @@ export default function Exercises() {
 
     const modifiedId = id?.split("_").join(" ") || "";
 
-    const [moduleData, setModuleData] = useState<ITreeNode | null>(null);
     const [topicData, setTopicData] = useState<ITopic | null>(null);
 
     const getTopicContent = async () => {
         const matchingModule = findTopicByName(modifiedId);
-        console.log(modifiedId, matchingModule);
-        setModuleData(matchingModule || null);
         setTopicData(matchingModule?.topics.find(l => l.name === modifiedId) || null);
     }
 

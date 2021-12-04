@@ -10,9 +10,10 @@ import { Link, useLocation } from "react-router-dom";
 
 function SidebarTopicList({ node }: { node: ITreeNode }) {
     const location = useLocation();
-    let viewingArticle: string | undefined = location.pathname.startsWith("/article") ? location.pathname.split("/")[2] : "";
-    
-    const [opened, setOpened] = useState(node.topics.some(l => viewingArticle?.split("_").join(" ") === l.name));
+    let viewingArticle: string | undefined = location.pathname.startsWith("/article") || location.pathname.startsWith("/exercises") ? location.pathname.split("/")[2] : "";
+    const viewingNode = location.pathname.startsWith("/treeSection") ? location.pathname.split("/")[2] : "";
+
+    const [opened, setOpened] = useState(node.topics.some(l => viewingArticle?.split("_").join(" ") === l.name) || viewingNode?.split("_").join(" ") === node.name);
     
     return <div className="sidebarTopicList" style={{ height: opened ? node.topics.slice(0, 4).length * 50 + 60 : 60 }}>
         <div className="sidebarTopicListHeader" onClick={() => setOpened(!opened)}>
@@ -31,7 +32,7 @@ function SidebarTopicList({ node }: { node: ITreeNode }) {
                 </div>
             </Link>
         )) }
-        { opened && node.topics.length > 3 && <div className="sidebarTopic" style={{ color: "#4565EF" }}>See all...</div>}
+        { opened && node.topics.length > 3 && <Link to={`/treeSection/${node.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}><div className="sidebarTopic" style={{ color: "#4565EF" }}>See all...</div></Link>}
     </div>
 }
 

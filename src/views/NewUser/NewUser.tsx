@@ -11,8 +11,8 @@ export default function NewUserPage() {
 
     const handleSubmit = () => {
         if (grade === 8) {
-            tree.nodes[0].complete = true;
-            findNodeByName("Systems of Equations")!.complete = true;
+            tree.nodes[0].topics.map(l => l.complete = true);
+            findNodeByName("Systems of Equations")!.topics.map(l => l.complete = true);
             navigate("/tree");
         }
     }

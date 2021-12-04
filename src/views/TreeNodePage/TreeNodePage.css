@@ -1,0 +1,57 @@
+.treeNodePage {
+    background-color: #44484F;
+    min-height: 100vh;
+    font-family: "Whitney";
+    display: flex;
+}
+
+.treeNodeContent {
+    width: calc(100% - 350px);
+    padding: 0 20px;
+    text-align: left;
+}
+
+.treeNodePageTopicList {
+    background-color: #36393D;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 20px 0;
+}
+
+.treeNodePageTopicList h3 {
+    margin: 0 0 10px 0;
+}
+
+.treeNodePageTopicList ul {
+    margin: 0 0 0 0;
+}
+
+.treeNodePageTopic {
+    padding: 7px 10px 8px 10px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.treeNodePageTopic:hover {
+    background-color: #44484F;
+}
+
+.treeNodePageTopic > .complete {
+    color: #4ACE53;
+}
+
+.treeNodePageTopic > .incomplete {
+    color: #E23B2F;
+}
+
+.takeModuleQuizButton {
+    background-color: #627BF3;
+    width: 200px;
+    border-radius: 10px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 20px auto;
+    text-align: center;
+}
