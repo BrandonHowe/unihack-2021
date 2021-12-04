@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import RemarkMathPlugin from 'remark-math';
 import rehypeKatex from "rehype-katex";
 import 'katex/dist/katex.min.css';
+import { Link } from "react-router-dom";
 
 interface Question {
     x: number;
@@ -35,7 +36,7 @@ const questions: Question[] = [
     { x: 58, y: 192, width: 476, height: 42, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
     { x: 58, y: 234, width: 407, height: 21, solution: p3Solution, topic: findNodeByName("Logarithms")! },
     { x: 58, y: 255, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-    { x: 58, y: 292, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Linear Equations")! },
+    { x: 58, y: 292, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
     { x: 58, y: 329, width: 368, height: 33, solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
     { x: 68, y: 387, width: 457, height: 50, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
     { x: 58, y: 437, width: 158, height: 20, solution: "just solve it rofl", topic: findNodeByName("Determinants")! },
@@ -121,31 +122,37 @@ export default function ExamPage() {
         <div className="examContent">
             <h2>Additional help</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Euismod nisi porta lorem mollis aliquam ut porttitor. Placerat vestibulum lectus mauris ultrices eros in cursus. Nunc consequat interdum varius sit amet. Vitae congue mauris rhoncus aenean vel elit. Quam adipiscing vitae proin sagittis. Aliquam malesuada bibendum arcu vitae elementum curabitur. Pellentesque dignissim enim sit amet venenatis urna cursus eget nunc. Tristique risus nec feugiat in. Id interdum velit laoreet id. Massa sed elementum tempus egestas sed sed risus pretium quam. Neque ornare aenean euismod elementum nisi. Orci porta non pulvinar neque laoreet suspendisse interdum. Sit amet massa vitae tortor condimentum lacinia quis.</p>
-            <div className="examContentButton">Check out similar exercises</div>
+            <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>
             <div className="examContentButton" onClick={() => setSolutionOpen(true)}>See solution to this problem</div>
             <h2>Knowledge tree</h2>
             <div className="examContentKnowledgeTree">
                 { doubleParentNode && <>
-                    <div className="examContentTreeNode">
-                        { doubleParentNode.name }
-                    </div>
+                    <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${doubleParentNode.name.split(" ").join("_")}`}>
+                        <div className="examContentTreeNode">
+                            { doubleParentNode.name }
+                        </div>
+                    </Link>
                     <div className="examContentTreeNodeConnectorRow">
                         <div className="examContentTreeNodeConnector"></div>
                         <div className="examContentTreeNodeConnector"></div>
                     </div>
                 </> }
                 { parentNode && <>
-                    <div className="examContentTreeNode">
-                        { parentNode.name }
-                    </div>
+                    <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${parentNode.name.split(" ").join("_")}`}>
+                        <div className="examContentTreeNode">
+                            { parentNode.name }
+                        </div>
+                    </Link>
                     <div className="examContentTreeNodeConnectorRow">
                         <div className="examContentTreeNodeConnector"></div>
                         <div className="examContentTreeNodeConnector"></div>
                     </div>
                 </> }
-                { currNode && <div className="examContentTreeNode">
-                    { currNode.name }
-                </div> }
+                { currNode && <Link to={`/module/${currNode.name.split(" ").join("_")}`}>
+                    <div className="examContentTreeNode">
+                        { currNode.name }
+                    </div>
+                </Link> }
             </div>
         </div>
         { solutionOpen && <div className="solutionModal" id="solutionModal" onClick={e => { if ((e.target as any).id === "solutionModal") setSolutionOpen(false) }}>

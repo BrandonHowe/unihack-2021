@@ -42,7 +42,7 @@ export default function TreeNodePage() {
                 </div>
                 <h3 style={{ fontSize: 24 }}>Module quiz</h3>
                 <p>In order to complete this module you must take the quiz. The required score to pass is an 80% or higher.</p>
-                <Link to={`/moduleQuiz/${moduleData.name}`} style={{ textDecoration: "none", color: "inherit" }}><div className="takeModuleQuizButton">Take module quiz</div></Link>
+                <Link to={`/moduleQuiz/${moduleData.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}><div className="takeModuleQuizButton">Take module quiz</div></Link>
             </> }
         </div>
     </div>

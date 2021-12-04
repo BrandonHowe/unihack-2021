@@ -11,7 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 function SidebarTopicList({ node }: { node: ITreeNode }) {
     const location = useLocation();
     let viewingArticle: string | undefined = location.pathname.startsWith("/article") || location.pathname.startsWith("/exercises") ? location.pathname.split("/")[2] : "";
-    const viewingNode = location.pathname.startsWith("/treeSection") ? location.pathname.split("/")[2] : "";
+    const viewingNode = location.pathname.startsWith("/module") ? location.pathname.split("/")[2] : "";
 
     const [opened, setOpened] = useState(node.topics.some(l => viewingArticle?.split("_").join(" ") === l.name) || viewingNode?.split("_").join(" ") === node.name);
     
@@ -26,13 +26,13 @@ function SidebarTopicList({ node }: { node: ITreeNode }) {
             />
         </div>
         { opened && node.topics.slice(0, 3).map(l => (
-            <Link to={`/article/${l.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <Link key={`${l.name}dgjfio`} to={`/article/${l.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}>
                 <div className="sidebarTopic" style={{ backgroundColor: viewingArticle?.split("_").join(" ") === l.name ? "#4E5156" : "inherit" }}>
                     { l.name }
                 </div>
             </Link>
         )) }
-        { opened && node.topics.length > 3 && <Link to={`/treeSection/${node.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}><div className="sidebarTopic" style={{ color: "#4565EF" }}>See all...</div></Link>}
+        { opened && node.topics.length > 3 && <Link to={`/module/${node.name.split(" ").join("_")}`} style={{ textDecoration: "none", color: "inherit" }}><div className="sidebarTopic" style={{ color: "#4565EF" }}>See all...</div></Link>}
     </div>
 }
 
@@ -47,32 +47,34 @@ export default function Sidebar() {
         <div className="sidebarLogo">
             <img src={logo} alt="KnowledgeTree logo" />
         </div>
-        <div className="sidebarField">
-            <img src={math} alt="Knowledge" />
-            <h3>Mathematics</h3>
+        <Link to="/tree">
+            <div className="sidebarField">
+                <img src={math} alt="Knowledge" />
+                <h3>Mathematics</h3>
             </div>
-            <div className="sidebarTopicList" style={{ height: examListOpen ? 160 : 60 }}>
-                <div className="sidebarTopicListHeader" onClick={() => setExamListOpen(!examListOpen)}>
-                    <h3>Exam models</h3>
-                    <Icon
-                        path={mdiChevronDown}
-                        size={1}
-                        color="#929292"
-                        className={`sidebarTopicListIcon${examListOpen ? " upsideDown" : ""}`}
-                    />
-                </div>
-                { examListOpen && <>
-                    <Link to="/exam/1" style={{ textDecoration: "none", color: "inherit" }}>
-                        <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/exam") ? "#4E5156" : "inherit" }}>
-                            Bac M1
-                        </div>
-                    </Link>
-                    <Link to="/exam/2" style={{ textDecoration: "none", color: "inherit" }}>
-                        <div className="sidebarTopic">
-                            Bac M2
-                        </div>
-                    </Link>
-                </> }
+        </Link>
+        <div className="sidebarTopicList" style={{ height: examListOpen ? 160 : 60 }}>
+            <div className="sidebarTopicListHeader" onClick={() => setExamListOpen(!examListOpen)}>
+                <h3>Exam models</h3>
+                <Icon
+                    path={mdiChevronDown}
+                    size={1}
+                    color="#929292"
+                    className={`sidebarTopicListIcon${examListOpen ? " upsideDown" : ""}`}
+                />
+            </div>
+            { examListOpen && <>
+                <Link to="/exam/1" style={{ textDecoration: "none", color: "inherit" }}>
+                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/exam") ? "#4E5156" : "inherit" }}>
+                        Bac M1
+                    </div>
+                </Link>
+                <Link to="/exam/2" style={{ textDecoration: "none", color: "inherit" }}>
+                    <div className="sidebarTopic">
+                        Bac M2
+                    </div>
+                </Link>
+            </> }
         </div>
         { flattenedNodes.map(l => <SidebarTopicList node={l} />) }
     </div>;

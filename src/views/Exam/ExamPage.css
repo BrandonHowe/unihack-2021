@@ -201,3 +201,8 @@
     display: inline-block;
     cursor: pointer;
 }
+
+a {
+    text-decoration: inherit;
+    color: inherit;
+}

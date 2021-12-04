@@ -1,6 +1,8 @@
 import LoremIpsum from "./views/Article/LoremIpsum";
 import { ITreeNode, tree } from "./views/TreePage/TreePage";
 
+export const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
 export const flatten = (node: ITreeNode): ITreeNode[] => {
     let currLevel = [node];
     let nextLevel = node.children;
