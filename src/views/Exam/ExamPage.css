@@ -107,20 +107,26 @@
     font-weight: bold;
 }
 
+.examContentButtons { 
+    display: flex;
+}
+
 .examContentButton {
     background-color: #627BF3;
-    width: 180px;
+    max-width: 180px;
+    flex-grow: 1;
     border-radius: 15px;
     height: 50px;
-    line-height: 50px;
     font-size: 14px;
     font-weight: bold;
-    display: inline-block;
     margin: 15px 15px 15px 0;
     padding: 0 10px;
     text-align: center;
     box-shadow: 0 1px 3px 0 #303135;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .examContentKnowledgeTree {
@@ -187,6 +193,7 @@
 }
 
 .solutionModal {
+    z-index: 1000;
     position: fixed;
     top: 0;
     left: 0;
@@ -220,4 +227,40 @@
 a {
     text-decoration: inherit;
     color: inherit;
+}
+
+.pageNavigator {
+    width: 100px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    border: 1px solid #999;
+    border-radius: 5px;
+    margin: 5px auto 0 auto;
+}
+
+.difficultExercisesModal {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.difficultExercisesContent {
+    background-color: #44484F;
+    width: 600px;
+    border-radius: 20px;
+    text-align: left;
+    padding: 20px 30px;
+}
+
+.difficultExercisesContent h2 {
+    margin: 0;
+    display: flex;
 }

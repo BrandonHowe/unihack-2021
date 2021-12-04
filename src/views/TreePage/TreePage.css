@@ -1,5 +1,5 @@
 .treePage {
-    background-color: #454950;
+    background-color: #36393F;
     min-height: 100vh;
     font-family: "Whitney";
     overflow-x: auto;
@@ -67,7 +67,7 @@
 }
 
 .treeNode {
-    width: 200px;
+    width: 220px;
     background-color: #36393D;
     border-radius: 10px;
     height: 30px;

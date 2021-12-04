@@ -23,9 +23,9 @@ export default function NewUserPage() {
         </div>
         <div style={{ width: 700, margin: "auto" }}>
             <h2 style={{ fontSize: 48, fontWeight: "bold" }}>Welcome to KnowledgeTree!</h2>
-            <h4 style={{ fontSize: 20, fontWeight: "normal" }}>Before you begin using KnowledgeTree, please enter the most recent grade level you completed so we can better assess which modules you need to work on.</h4>
+            <h4 style={{ fontSize: 20, fontWeight: "normal" }}>Before you begin using KnowledgeTree, please enter the most recent grade level you completed so we can better assess which modules you need to work on as well as any subjects that you may be interested in.</h4>
             <div style={{ width: 330, textAlign: "left", margin: "auto" }}>
-                <label htmlFor="gradeLevel">Grade level</label>
+                <label style={{ marginBottom: 5 }} htmlFor="gradeLevel">Grade level</label>
                 <br />
                 <select id="gradeLevel" onChange={e => setGrade(Number(e.target.value))}>
                     <option value={8}>8</option>
@@ -34,6 +34,25 @@ export default function NewUserPage() {
                     <option value={11}>11</option>
                     <option value={12}>12</option>
                 </select>
+
+                <label htmlFor="subjects">Subjects you are interested in</label><br />
+                <div className="checkboxes">
+                    <label htmlFor="mathematics" className="checkboxGroup">
+                        Mathematics
+                        <input type="checkbox" name="subjects" id="mathematics" value="Mathematics" />
+                        <span className="checkmark"></span>
+                    </label>
+                    <label htmlFor="biology" className="checkboxGroup">
+                        Biology
+                        <input type="checkbox" name="subjects" id="biology" value="Biology" />
+                        <span className="checkmark"></span>
+                    </label>
+                    <label htmlFor="physics" className="checkboxGroup">
+                        Physics
+                        <input type="checkbox" name="subjects" id="physics" value="Physics" />
+                        <span className="checkmark"></span>
+                    </label>
+                </div>
             </div>
             <div className="newUserSubmit" onClick={handleSubmit}>Submit</div>
         </div>

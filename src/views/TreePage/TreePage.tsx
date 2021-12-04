@@ -55,7 +55,7 @@ export interface ITreeCategory {
 const treeCategories: ITreeCategory[] = [
     {
         name: "Pre-algebra",
-        color: "#563C26",
+        color: "#493321",
         colorName: "Brown",
     },
     {
@@ -64,14 +64,24 @@ const treeCategories: ITreeCategory[] = [
         colorName: "Yellow"
     },
     {
-        name: "Algebra II",
+        name: "Geometry",
         color: "#283A19",
         colorName: "Green"
     },
     {
+        name: "Algebra II",
+        color: "#491616",
+        colorName: "Red"
+    },
+    {
         name: "Matrices",
         color: "#5B3628",
-        colorName: "Red"
+        colorName: "Orange"
+    },
+    {
+        name: "Calculus",
+        color: "#1E3044",
+        colorName: "Blue"
     }
 ]
 
@@ -112,6 +122,7 @@ const treeRaw: ITree = grabFromLS() || {
             children: [
                 {
                     name: "Geometry",
+                    category: treeCategories[2],
                     description: "Geometry is the study of shapes and angles. Learn about the different shapes and their mathematical properties.",
                     quizQuestions: [
                         {
@@ -369,6 +380,7 @@ const treeRaw: ITree = grabFromLS() || {
                                         {
                                             name: "Trigonometry",
                                             quizQuestions: [],
+                                            category: treeCategories[2],
                                             description: "",
                                             otherParent: sinAndCos,
                                             children: [],
@@ -377,13 +389,13 @@ const treeRaw: ITree = grabFromLS() || {
                                         {
                                             name: "Matrices",
                                             description: "",
-                                            category: treeCategories[3],
+                                            category: treeCategories[4],
                                             quizQuestions: [],
                                             children: [
                                                 {
                                                     name: "Determinants",
                                                     description: "",
-                                                    category: treeCategories[3],
+                                                    category: treeCategories[4],
                                                     quizQuestions: [],
                                                     topics: [],
                                                     children: []
@@ -394,7 +406,7 @@ const treeRaw: ITree = grabFromLS() || {
                                         {
                                             name: "Complex numbers",
                                             description: "",
-                                            category: treeCategories[2],
+                                            category: treeCategories[3],
                                             quizQuestions: [],
                                             topics: [],
                                             children: [
@@ -404,39 +416,42 @@ const treeRaw: ITree = grabFromLS() || {
                                         {
                                             name: "Exponentials",
                                             description: "",
-                                            category: treeCategories[2],
+                                            category: treeCategories[3],
                                             quizQuestions: [],
                                             topics: [],
                                             children: [
                                                 {
                                                     name: "Logarithms",
                                                     description: "",
-                                                    category: treeCategories[2],
+                                                    category: treeCategories[3],
                                                     quizQuestions: [],
                                                     topics: [],
                                                     children: [
                                                         { 
                                                             name: "Rational functions",
                                                             description: "",
-                                                            category: treeCategories[2],
+                                                            category: treeCategories[3],
                                                             quizQuestions: [],
                                                             topics: [],
                                                             children: [
                                                                 {
                                                                     name: "Limits",
                                                                     description: "",
+                                                                    category: treeCategories[5],
                                                                     quizQuestions: [],
                                                                     topics: [],
                                                                     children: [
                                                                         {
                                                                             name: "Derivatives",
                                                                             description: "",
+                                                                            category: treeCategories[5],
                                                                             quizQuestions: [],
                                                                             topics: [],
                                                                             children: [
                                                                                 {
                                                                                     name: "Integrals",
                                                                                     description: "",
+                                                                                    category: treeCategories[5],
                                                                                     quizQuestions: [],
                                                                                     topics: [],
                                                                                     children: []

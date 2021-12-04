@@ -1,16 +1,21 @@
 .landingPage {
-    background-color: #454950;
+    background-color: #36393F;
     min-height: 100vh;
     font-family: "Whitney";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .landingPageLogo > img {
     margin-top: 50px;
-    width: 400px;
+    width: 500px;
+    filter: drop-shadow(0 2px 4px #292B2F);
 }
 
 .landingPageCheckOutButton {
     background-color: #627BF3;
+    box-shadow: 0 2px 7px 0 #292B2F;
     width: 200px;
     border-radius: 10px;
     height: 50px;
@@ -26,7 +31,7 @@
 
 .landingPageModule {
     width: 300px;
-    background-color: #36393D;
+    background-color: #292B2F;
     padding: 20px;
     border-radius: 20px;
     display: inline-block;

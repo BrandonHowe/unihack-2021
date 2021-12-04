@@ -65,12 +65,12 @@ export default function Sidebar() {
             </div>
             { examListOpen && <>
                 <Link to="/exam/1" style={{ textDecoration: "none", color: "inherit" }}>
-                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/exam") ? "#4E5156" : "inherit" }}>
+                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/exam/1") ? "#4E5156" : "inherit" }}>
                         Bac M1
                     </div>
                 </Link>
                 <Link to="/exam/2" style={{ textDecoration: "none", color: "inherit" }}>
-                    <div className="sidebarTopic">
+                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/exam/2") ? "#4E5156" : "inherit" }}>
                         Bac M2
                     </div>
                 </Link>
