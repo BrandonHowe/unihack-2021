@@ -1,6 +1,4 @@
 import "./ExamPage.css";
-import logo from "../../assets/logo.png";
-import math from "../../assets/math.png";
 import { ITreeNode, tree } from "../TreePage/TreePage";
 import { MouseEventHandler, useRef, useState } from "react";
 import Icon from "@mdi/react";
@@ -24,6 +22,19 @@ const questions: Question[] = [
     { x: 58, y: 255, width: 476, height: 37, topic: findNodeByName("Quadratics")! },
     { x: 58, y: 292, width: 476, height: 37, topic: findNodeByName("Linear Equations")! },
     { x: 58, y: 329, width: 368, height: 33, topic: findNodeByName("Trigonometry")! },
+    { x: 68, y: 387, width: 457, height: 50, topic: findNodeByName("Matrices")! },
+    { x: 58, y: 437, width: 158, height: 20, topic: findNodeByName("Determinants")! },
+    { x: 58, y: 457, width: 440, height: 23, topic: findNodeByName("Matrices")! },
+    { x: 58, y: 480, width: 336, height: 20, topic: findNodeByName("Matrices")! },
+    { x: 58, y: 505, width: 473, height: 28, topic: findNodeByName("Limits")! },
+    { x: 58, y: 533, width: 128, height: 15, topic: findNodeByName("Limits")! },
+    { x: 58, y: 548, width: 406, height: 14, topic: findNodeByName("Limits")! },
+    { x: 58, y: 562, width: 351, height: 23, topic: findNodeByName("Quadratics")! },
+    { x: 68, y: 608, width: 270, height: 27, topic: findNodeByName("Rational functions")! },
+    { x: 58, y: 635, width: 214, height: 42, topic: findNodeByName("Limits")! },
+    { x: 58, y: 673, width: 371, height: 19, topic: findNodeByName("Limits")! },
+    { x: 58, y: 692, width: 430, height: 51, topic: findNodeByName("Derivatives")! },
+    { x: 58, y: 743, width: 204, height: 37, topic: findNodeByName("Integrals")! },
 ];
 
 const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: number, width: number, height: number }) => {
@@ -34,31 +45,9 @@ const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: numb
     return true;
 }
 
-function ExamPageTopicList({ node }: { node: ITreeNode }) {
-    const [opened, setOpened] = useState(false);
-    
-    return <div className="examPageTopicList" style={{ height: opened ? node.topics.slice(0, 4).length * 50 + 60 : 60 }}>
-        <div className="examPageTopicListHeader" onClick={() => setOpened(!opened)}>
-            <h3>{ node.name }</h3>
-            <Icon
-                path={mdiChevronDown}
-                size={1}
-                color="#929292"
-                className={`examPageTopicListIcon${opened ? " upsideDown" : ""}`}
-            />
-        </div>
-        { opened && node.topics.slice(0, 3).map(l => (
-            <div className="examPageTopic">
-                { l }
-            </div>
-        )) }
-        { opened && node.topics.length > 3 && <div className="examPageTopic" style={{ color: "#4565EF" }}>See all...</div>}
-    </div>
-}
-
 export default function ExamPage() {
-    const [numPages, setNumPages] = useState<unknown>(null);
-    const [pageNumber, setPageNumber] = useState(1);
+    const [_, setNumPages] = useState<unknown>(null);
+    const [pageNumber, __] = useState(1);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
 
     const documentRef = useRef<HTMLDivElement>(null);

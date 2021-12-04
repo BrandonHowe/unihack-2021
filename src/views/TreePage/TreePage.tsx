@@ -143,33 +143,41 @@ export const tree: ITree = {
                                                     category: treeCategories[2],
                                                     topics: [],
                                                     children: [
-                                                        {
-                                                            name: "Sine and cosine",
+                                                        { 
+                                                            name: "Rational functions",
                                                             complete: false,
                                                             category: treeCategories[2],
                                                             topics: [],
                                                             children: [
                                                                 {
-                                                                    name: "Limits",
+                                                                    name: "Sine and cosine",
                                                                     complete: false,
+                                                                    category: treeCategories[2],
                                                                     topics: [],
                                                                     children: [
                                                                         {
-                                                                            name: "Differentiation",
+                                                                            name: "Limits",
                                                                             complete: false,
                                                                             topics: [],
                                                                             children: [
                                                                                 {
-                                                                                    name: "Integration",
+                                                                                    name: "Derivatives",
                                                                                     complete: false,
                                                                                     topics: [],
-                                                                                    children: []
+                                                                                    children: [
+                                                                                        {
+                                                                                            name: "Integrals",
+                                                                                            complete: false,
+                                                                                            topics: [],
+                                                                                            children: []
+                                                                                        }
+                                                                                    ]
                                                                                 }
                                                                             ]
                                                                         }
-                                                                    ]
+                                                                    ],
                                                                 }
-                                                            ],
+                                                            ]
                                                         }
                                                     ]
                                                 }
