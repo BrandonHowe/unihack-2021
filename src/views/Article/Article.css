@@ -1,0 +1,4 @@
+.mainArticle {
+    width: calc(100% - 350px);
+    text-align: left;
+}

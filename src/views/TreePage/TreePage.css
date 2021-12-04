@@ -82,6 +82,10 @@
     user-select: none;
 }
 
+.treeNode.complete {
+    border: 2px solid #A1DDA4;
+}
+
 .treeNodeText {
     height: 30px;
     line-height: 30px;

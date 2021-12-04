@@ -6,6 +6,7 @@ import { MouseEventHandler, useRef, useState } from "react";
 import Icon from "@mdi/react";
 import { mdiChevronDown } from "@mdi/js";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
+import { findNodeByName, flatten } from "../../helpers";
 
 interface Question {
     x: number;
@@ -14,21 +15,6 @@ interface Question {
     height: number;
     topic: ITreeNode;
 }
-
-const findNodeByName = (name: string, node: ITreeNode = tree.nodes[0]): ITreeNode | undefined => {
-    if (node.name === name) {
-        return node;
-    }
-    if (!node.children.length) {
-        return undefined;
-    }
-    for (const child of node.children) {
-        const r = findNodeByName(name, child);
-        if (r) {
-            return r;
-        }
-    }
-};
 
 const questions: Question[] = [
     { x: 58, y: 170, width: 289, height: 21, topic: findNodeByName("Complex numbers")! },
@@ -112,20 +98,6 @@ export default function ExamPage() {
     const currNode = selectedQuestion?.topic;
     const parentNode = currNode && findParentNode(currNode.name, tree.nodes[0]);
     const doubleParentNode = parentNode && findParentNode(parentNode.name, tree.nodes[0]);
-
-    const flatten = (node: ITreeNode): ITreeNode[] => {
-        let currLevel = [node];
-        let nextLevel = node.children;
-        while (nextLevel.length !== 0) {
-            let newNextLevel = [];
-            for (const thing of nextLevel) {
-                newNextLevel.push(...thing.children);
-            }
-            currLevel = currLevel.concat(nextLevel);
-            nextLevel = newNextLevel;
-        }
-        return currLevel;
-    }
 
     const flattenedNodes: ITreeNode[] = flatten(tree.nodes[0]);
     

@@ -11,6 +11,7 @@ import { ArticlePage } from './views/Article/Article';
 import LandingPage from './views/LandingPage/LandingPage';
 import TreePage from './views/TreePage/TreePage';
 import ExamPage from './views/Exam/ExamPage';
+import NewUserPage from './views/NewUser/NewUser';
 
 function Home() {
   return <h1>djfaodji</h1>
@@ -26,6 +27,7 @@ function App() {
           <Route path="/article/:id" element={<ArticlePage />}></Route>
           <Route path="/tree" element={<TreePage />}></Route>
           <Route path="/exam" element={<ExamPage />}></Route>
+          <Route path="/newUser" element={<NewUserPage />}></Route>
         </Routes>
     </div>
   );
