@@ -2,6 +2,15 @@
     background-color: #454950;
     min-height: 100vh;
     font-family: "Whitney";
+    overflow-x: auto;
+    background-image: radial-gradient(#929292 4%, transparent 8%);
+    background-color: #454950;
+    background-position: 300px -300px, 5px 5px;
+    background-size: 25px 25px;
+}
+
+.landingPageLogo {
+    width: 100%;
 }
 
 .landingPageLogo > img {
@@ -20,6 +29,28 @@
     cursor: pointer;
     box-shadow: 0 1px 1px 0 #36393D;
     display: flex;
+}
+
+.treeKey {
+    width: 190px;
+    background-color: #36393D;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px auto;
+    cursor: pointer;
+    box-shadow: 0 1px 1px 0 #36393D;
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    text-align: left;
+}
+
+.treeKey h2 {
+    margin: 5px;
+}
+
+.treeKey h3 {
+    margin: 5px;
 }
 
 .treeHeader > img {
@@ -48,6 +79,7 @@
     position: relative;
     transition: all .3s ease;
     overflow: hidden;
+    user-select: none;
 }
 
 .treeNodeText {
@@ -67,6 +99,11 @@
     position: absolute;
     right: 14px;
     top: 14px;
+    transition: transform .3s ease;
+}
+
+.treeNodeIcon.upsideDown {
+    transform: rotate(180deg);
 }
 
 .treeLevel {

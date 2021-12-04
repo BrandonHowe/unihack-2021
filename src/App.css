@@ -54,10 +54,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #fff;
-    width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 .topBar {
     height: 20px;

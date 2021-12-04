@@ -5,19 +5,161 @@ import { mdiChevronDown } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useState } from "react";
 
-interface ITree {
+export interface ITree {
     name: string;
     image: string;
     nodes: ITreeNode[];
 }
 
-interface ITreeNode {
+export interface ITreeNode {
     name: string;
+    category?: ITreeCategory;
     topics: string[]
     children: ITreeNode[];
 }
 
-function TreeNode({ name, topics, children, first }: ITreeNode & { first?: boolean }) {
+export interface ITreeCategory {
+    name: string;
+    color: string;
+    colorName: string;
+}
+
+const trig = {
+    name: "Trigonometry",
+    children: [],
+    topics: []
+};
+
+const treeCategories: ITreeCategory[] = [
+    {
+        name: "Pre-algebra",
+        color: "#563C26",
+        colorName: "Brown",
+    },
+    {
+        name: "Algebra",
+        color: "#545425",
+        colorName: "Yellow"
+    },
+    {
+        name: "Algebra II",
+        color: "#283A19",
+        colorName: "Green"
+    },
+    {
+        name: "Matrices",
+        color: "#5B3628",
+        colorName: "Red"
+    }
+]
+
+export const tree: ITree = {
+    name: "Mathematics",
+    image: knowledge,
+    nodes: [
+        {
+            name: "Linear Equations",
+            category: treeCategories[0],
+            topics: ["Variables on one side", "Variables on both sides", "Unknown coefficients", "Solving inequalities", "Graphing linear equations"],
+            children: [
+                {
+                    name: "Geometry",
+                    children: [trig],
+                    topics: [
+                        "Triangles",
+                        "Circles",
+                        "Quadrilaterals",
+                        "Ellipses",
+                        "Cones"
+                    ],
+                },
+                {
+                    name: "Systems of Equations",
+                    category: treeCategories[0],
+                    topics: ["Solving systems with substitution", "Solving systems with elimination", "Number of solutions of systems", "Graphing systems of equations"],
+                    children: [
+                        {
+                            name: "Factoring",
+                            category: treeCategories[1],
+                            topics: ["Distributive property", "Factoring by grouping", "Difference of squares", "Perfect squares", "Factoring quadratics"],
+                            children: [
+                                {
+                                    name: "Quadratics",
+                                    category: treeCategories[1],
+                                    topics: [],
+                                    children: [
+                                        {
+                                            name: "Matrices",
+                                            category: treeCategories[3],
+                                            children: [
+                                                {
+                                                    name: "Determinants",
+                                                    category: treeCategories[3],
+                                                    topics: [],
+                                                    children: []
+                                                }
+                                            ],
+                                            topics: []
+                                        },
+                                        {
+                                            name: "Complex numbers",
+                                            category: treeCategories[2],
+                                            topics: [],
+                                            children: [
+                                                
+                                            ],
+                                        },
+                                        {
+                                            name: "Exponentials",
+                                            category: treeCategories[2],
+                                            topics: [],
+                                            children: [
+                                                {
+                                                    name: "Logarithms",
+                                                    category: treeCategories[2],
+                                                    topics: [],
+                                                    children: [
+                                                        {
+                                                            name: "Sine and cosine",
+                                                            category: treeCategories[2],
+                                                            topics: [],
+                                                            children: [
+                                                                trig,
+                                                                {
+                                                                    name: "Limits",
+                                                                    topics: [],
+                                                                    children: [
+                                                                        {
+                                                                            name: "Differentiation",
+                                                                            topics: [],
+                                                                            children: [
+                                                                                {
+                                                                                    name: "Integration",
+                                                                                    topics: [],
+                                                                                    children: []
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                        }
+                                    ],
+                                }
+                            ],
+                        }
+                    ],
+                },
+            ]
+        }
+    ]
+}
+
+function TreeNode({ name, category, topics, children, first }: ITreeNode & { first?: boolean }) {
     const [opened, setOpened] = useState(false);
 
     const levels: ITreeNode[][] = [];
@@ -34,8 +176,6 @@ function TreeNode({ name, topics, children, first }: ITreeNode & { first?: boole
         nextLevel = [];
     }
 
-    console.log(levels);
-
     const widthNeeded = (node: ITreeNode): number => {
         if (node.children.length >= 2) {
             return node.children.reduce((acc, cur) => acc + widthNeeded(cur), 0)
@@ -44,21 +184,21 @@ function TreeNode({ name, topics, children, first }: ITreeNode & { first?: boole
         }
     };
 
-    console.log(widthNeeded({ name, topics, children }));
+    const width = widthNeeded({ name, topics, children });
 
-    return <div className="treeNodeArea" style={{ width: widthNeeded({ name, topics, children }) }}>
+    return <div className="treeNodeArea">
         { first && <div className="treeNodeTopRow">
             <div className="treeNodeTopRowBox"></div>
             <div className="treeNodeTopRowBox"></div>
         </div> }
-        <div className="treeNode" style={{ height: opened ? topics.length === 0 ? 30 : topics.slice(0, 4).length * 40 + 30 : 30}}>
-            <h3 className="treeNodeText">{ name }</h3>
+        <div className="treeNode" style={{ height: opened ? topics.length === 0 ? 30 : topics.slice(0, 4).length * 40 + 30 : 30, backgroundColor: category?.color }}>
+            <h3 className="treeNodeText" onClick={() => setOpened(!opened)}>{ name }</h3>
             <div onClick={() => setOpened(!opened)}>
                 <Icon
                     path={mdiChevronDown}
                     size={1}
                     color="#929292"
-                    className="treeNodeIcon"
+                    className={`treeNodeIcon${opened ? " upsideDown" : ""}`}
                 />
             </div>
             {
@@ -91,56 +231,6 @@ function TreeLevel({ contents, firstLevel }: { contents: ITreeNode[], firstLevel
 }
 
 export default function TreePage() {
-    const tree: ITree = {
-        name: "Mathematics",
-        image: knowledge,
-        nodes: [
-            {
-                name: "Pre-Algebra",
-                topics: [],
-                children: [
-                    {
-                        name: "Geometry",
-                        children: [],
-                        topics: [
-                            "Triangles",
-                            "Circles",
-                            "Quadrilaterals",
-                            "Ellipses",
-                            "Cones"
-                        ],
-                    },
-                    {
-                        name: "Algebra",
-                        children: [
-                            {
-                                name: "Algebra II",
-                                children: [],
-                                topics: ["Cubic functions"]
-                            },
-                            {
-                                name: "Trigonometry",
-                                children: [],
-                                topics: []
-                            }
-                        ],
-                        topics: ["Factoring", "Ratios", "Patterns"]
-                    },
-                    {
-                        name: "Number theory",
-                        children: [],
-                        topics: []
-                    },
-                    {
-                        name: "Counting",
-                        children: [],
-                        topics: []
-                    }
-                ]
-            }
-        ]
-    }
-    
     const levels: ITreeNode[][] = [];
     let currentLevel = tree.nodes;
     let nextLevel = [];
@@ -155,16 +245,22 @@ export default function TreePage() {
         nextLevel = [];
     }
 
-    console.log(levels);
-
     return <div className="treePage">
-        <div className="landingPageLogo">
-            <img src={logo} alt="Logo" />
+        <div className="treeKey">
+            <h2>Unit key</h2>
+            { treeCategories.map(l => <h3><span style={{ color: l.color }}>{l.colorName}</span><span> - {l.name}</span></h3>) }
+        </div>
+        <div style={{ display: "inline-block" }}>
+            <div className="landingPageLogo">
+                <img src={logo} alt="Logo" />
+            </div>
             <div className="treeHeader">
                 <img src={tree.image} alt="TreeImage" />
                 <h3>{tree.name}</h3>
             </div>
-            <TreeLevel firstLevel={true} contents={levels[0]} />
+            <div style={{ marginBottom: 50, display: "inline-block", width: "100%" }}>
+                <TreeLevel firstLevel={true} contents={levels[0]} />
+            </div>
         </div>
     </div>
 }

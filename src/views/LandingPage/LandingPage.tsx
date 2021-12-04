@@ -8,7 +8,7 @@ function LandingPageModule({ name, image, description, url }: { name: string, ur
     return <div className="landingPageModule">
         <h2 className="landingPageModuleName">{name}</h2>
         <div className="landingPageModuleRow">
-            <img src={image} />
+            <img src={image} alt="Module" />
             <div className="landingPageModuleDesc">
                 <p>{description}</p>
                 <Link className="landingPageModuleDescLink" to={url} style={{ textAlign: "right" }}>Check out now</Link>
@@ -22,10 +22,11 @@ export default function LandingPage() {
         <div className="landingPageLogo">
             <img src={logo} alt="Logo" />
         </div>
-        <h5>Discovr what knowledge you are missing and put it all together. No more barriers or secrets. The knowledge tree of the world is in your hands.</h5>
+        <h5>Discovr what knowledge you are missing and put it all together. No more barriers or secrets.</h5>
+        <h5>The knowledge tree of the world is in your hands.</h5>
         <div className="landingPageCheckOutButton">Check out our subjects</div>
         <h5>Or check out our modules directly...</h5>
-        <div className="landingPageModuleRow">
+        <div className="landingPageModuleList">
             <LandingPageModule image={knowledge} name="Mathematics" description="Full curriculum available right now, from Algebra and Geometry to Matrices and Calculus." url="/" />
             <LandingPageModule image={microscope} name="Biology" description="Full curriculum available right now, from environmental biology to full body anatomy." url="/" />
             <LandingPageModule image={knowledge} name="Physics" description="Full curriculum available right now, from kinematics to rotational motion." url="/" />

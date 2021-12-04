@@ -1,0 +1,172 @@
+.examPage {
+    background-color: #44484F;
+    min-height: 100vh;
+    font-family: "Whitney";
+    display: flex;
+}
+
+.examPageOverview {
+    width: 300px;
+    margin: 20px;
+    height: calc(100vh - 40px);
+    border-radius: 20px;
+    background-color: #36393D;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+}
+
+.examPageLogo {
+    width: 250px;
+    padding: 25px;
+    background-color: #36393D;
+    border-radius: 20px;
+}
+
+.examPageLogo img {
+    width: 250px;
+}
+
+.examPageField {
+    width: 250px;
+    padding: 25px;
+    height: 70px;
+    display: flex;
+    align-content: center;
+    background-color: #36393D;
+}
+
+.examPageField img {
+    height: 70px;
+    margin-right: 20px;
+}
+
+.examPageField h3 {
+    margin: 0;
+    line-height: 50px;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.examPageTopicList {
+    overflow: hidden;
+    transition: all .3s ease;
+    background-color: #303135;
+}
+
+.examPageTopicListHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    height: 30px;
+    position: relative;
+    cursor: pointer;
+    background-color: #36393D;
+    user-select: none;
+}
+
+.examPageTopicListHeader h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.examPageTopicListIcon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    transition: transform .3s ease;
+}
+
+.examPageTopicListIcon.upsideDown {
+    transform: rotate(180deg);
+}
+
+.examPageTopic {
+    height: 50px;
+    line-height: 50px;
+    text-align: left;
+    padding-left: 40px;
+}
+
+.examPreview {
+    height: calc(100vh - 40px);
+    padding: 20px 20px 20px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.examContent {
+    text-align: left;
+    padding: 20px;
+}
+
+.examContent > h2 {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.examContentButton {
+    background-color: #627BF3;
+    width: 180px;
+    border-radius: 15px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    margin: 15px 15px 15px 0;
+    padding: 0 10px;
+    text-align: center;
+    box-shadow: 0 1px 3px 0 #303135;
+    cursor: pointer;
+}
+
+.examContentKnowledgeTree {
+    background-image: radial-gradient(#929292 4%, transparent 8%);
+    background-color: transparent;
+    background-position: 0 100px;
+    background-size: 25px 25px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.examContentTreeNode {
+    width: 200px;
+    background-color: #36393D;
+    border-radius: 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+    margin: 0 auto;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 1px 1px 0 #36393D;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+    transition: all .3s ease;
+    overflow: hidden;
+    user-select: none;
+}
+
+.examContentTreeNodeConnectorRow {
+    height: 50px;
+    display: flex;
+}
+
+.examContentTreeNodeConnector {
+    width: 50%;
+    height: 50px;
+}
+
+.examContentTreeNodeConnector:first-child {
+    border-right: 3px solid #4565EF;
+}
+
+.examContentTreeNodeConnector:last-child {
+    border-left: 3px solid #4565EF;
+}
