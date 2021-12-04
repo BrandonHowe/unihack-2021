@@ -1,10 +1,11 @@
+import LoremIpsum from "./views/Article/LoremIpsum";
 import { ITreeNode, tree } from "./views/TreePage/TreePage";
 
 export const flatten = (node: ITreeNode): ITreeNode[] => {
     let currLevel = [node];
     let nextLevel = node.children;
     while (nextLevel.length !== 0) {
-        let newNextLevel = [];
+        let newNextLevel: ITreeNode[] = [];
         for (const thing of nextLevel) {
             newNextLevel.push(...thing.children);
         }
@@ -12,6 +13,17 @@ export const flatten = (node: ITreeNode): ITreeNode[] => {
         nextLevel = newNextLevel;
     }
     return currLevel;
+}
+
+export function genRandomArticle() {
+    const paras = LoremIpsum.split("\n\n");
+
+    let shuffled = paras
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+    return shuffled.join("\n\n");
 }
 
 export const findNodeByName = (name: string, node: ITreeNode = tree.nodes[0]): ITreeNode | undefined => {

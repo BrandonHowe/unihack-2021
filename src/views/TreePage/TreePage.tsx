@@ -5,6 +5,8 @@ import { mdiChevronDown } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useState } from "react";
 import LoremIpsum from "../Article/LoremIpsum";
+import { genRandomArticle } from "../../helpers";
+import ArcArticle from "./ArcArticle";
 
 export interface ITree {
     name: string;
@@ -54,17 +56,6 @@ const treeCategories: ITreeCategory[] = [
     }
 ]
 
-const genRandomArticle = () => {
-    const paras = LoremIpsum.split("\n\n");
-
-    let shuffled = paras
-        .map((value) => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value);
-
-    return shuffled.join("\n\n");
-}
-
 const genTopic = (name: string): ITopic => {
     return { name, article: genRandomArticle() };
 }
@@ -93,7 +84,7 @@ export const tree: ITree = {
                     topics: [
                         genTopic("Triangles"),
                         genTopic("Circles"),
-                        genTopic("Quadrilaterals"),
+                        { name: "Arcs and sectors", article: ArcArticle },
                         genTopic("Ellipses"),
                         genTopic("Cones")
                     ],
@@ -200,7 +191,7 @@ function TreeNode({ name, complete, category, topics, children, first }: ITreeNo
 
     const levels: ITreeNode[][] = [];
     let currentLevel = children;
-    let nextLevel = [];
+    let nextLevel: ITreeNode[] = [];
 
     while (currentLevel.length !== 0) {
         levels.push([]);
@@ -269,7 +260,7 @@ function TreeLevel({ contents, firstLevel }: { contents: ITreeNode[], firstLevel
 export default function TreePage() {
     const levels: ITreeNode[][] = [];
     let currentLevel = tree.nodes;
-    let nextLevel = [];
+    let nextLevel: ITreeNode[] = [];
 
     while (currentLevel.length !== 0) {
         levels.push([]);

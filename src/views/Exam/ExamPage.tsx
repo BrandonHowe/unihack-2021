@@ -59,7 +59,6 @@ function ExamPageTopicList({ node }: { node: ITreeNode }) {
 export default function ExamPage() {
     const [numPages, setNumPages] = useState<unknown>(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const [examListOpen, setExamListOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
 
     const documentRef = useRef<HTMLDivElement>(null);
