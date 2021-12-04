@@ -1,8 +1,6 @@
 import "./ExamPage.css";
 import { ITreeNode, tree } from "../TreePage/TreePage";
 import { MouseEventHandler, useRef, useState } from "react";
-import Icon from "@mdi/react";
-import { mdiChevronDown } from "@mdi/js";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import { findNodeByName, flatten } from "../../helpers";
 import Sidebar from "../../components/Sidebar/Sidebar";

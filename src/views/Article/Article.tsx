@@ -1,16 +1,9 @@
 import { useParams } from "react-router";
 
 import ReactMarkdown from 'react-markdown'
-import React, { useEffect, useState } from "react";
-
-import logo from "../../assets/logo.png";
-import math from "../../assets/math.png";
-import { mdiChevronDown } from "@mdi/js";
-import Icon from "@mdi/react";
-import { findTopicByName, flatten } from "../../helpers";
-import { ITreeNode, tree } from "../TreePage/TreePage";
+import { useEffect, useState } from "react";
+import { findTopicByName } from "../../helpers";
 import "./Article.css";
-import LoremIpsum from "./LoremIpsum";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import 'katex/dist/katex.min.css';
 import RemarkMathPlugin from 'remark-math';
@@ -36,6 +29,7 @@ export function ArticlePage() {
 
     useEffect(() => {
         getArticleContent().then(setArticleContent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     return <div className="articlePage">
