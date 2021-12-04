@@ -142,7 +142,7 @@ export default function ExamPage() {
                 <Markdown content={LoremIpsum} />
             </div>
             <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>
-            <div className="examContentButton" onClick={() => setSolutionOpen(true)}>See solution to this problem</div>
+            <div className="examContentButton" onClick={() => selectedQuestion && setSolutionOpen(true)}>See solution to this problem</div>
             <h2>Knowledge tree</h2>
             <div className="examContentKnowledgeTree">
                 <div className="examContentTreeRow">

@@ -4,7 +4,7 @@ import Icon from '@mdi/react';
 import { mdiCheck, mdiChevronDown, mdiCircleHalfFull, mdiSchool } from '@mdi/js';
 import knowledge from "../../assets/knowledge.png";
 import { useEffect, useRef, useState } from "react";
-import { findParentNode, flatten, genRandomArticle } from "../../helpers";
+import { findNodeByName, findParentNode, flatten, genRandomArticle } from "../../helpers";
 import ArcArticle from "./ArcArticle";
 import { Link } from "react-router-dom";
 import ObservableSlim from "observable-slim";
@@ -88,7 +88,18 @@ const sinAndCos = {
     children: []
 };
 
-const treeRaw: ITree = localStorage.getItem("tree") ? JSON.parse(localStorage.getItem("tree")!) : {
+const grabFromLS = () => {
+    if (!localStorage.getItem("tree")) {
+        return;
+    }
+    const stuff: ITree = JSON.parse(localStorage.getItem("tree")!);
+    const sincos: ITreeNode = JSON.parse(localStorage.getItem("sincos")!);
+    stuff.nodes[0].children[1].children[0].children[0].children[0].otherParent = sincos;
+    stuff.nodes[0].children[0].children[0] = sincos;
+    return stuff;
+}
+
+const treeRaw: ITree = grabFromLS() || {
     name: "Mathematics",
     image: knowledge,
     nodes: [
@@ -453,6 +464,7 @@ const treeRaw: ITree = localStorage.getItem("tree") ? JSON.parse(localStorage.ge
 
 export const tree = ObservableSlim.create(treeRaw, true, function(changes) {
 	console.log(JSON.stringify(changes), treeRaw);
+    localStorage.setItem("sincos", JSON.stringify(sinAndCos));
     localStorage.setItem("tree", JSON.stringify(treeRaw));
 });
 
