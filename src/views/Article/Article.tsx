@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import ReactMarkdown from 'react-markdown'
 import { useEffect, useState } from "react";
@@ -17,6 +17,8 @@ interface Article {
 
 export function ArticlePage() {
     const { id } = useParams();
+
+    const navigate = useNavigate();
 
     const modifiedId = id?.split("_").join(" ") || "";
 
@@ -41,6 +43,7 @@ export function ArticlePage() {
             <Sidebar />
             <div className="mainArticle">
                 <h2 style={{ textAlign: "center", fontSize: 36 }}>{ articleContent?.title || "Loading..." }</h2>{ articleContent && <ReactMarkdown children={articleContent.content} remarkPlugins={[RemarkMathPlugin]} rehypePlugins={[rehypeKatex]}></ReactMarkdown> }
+                <div className="viewExercises" onClick={() => navigate(`/exercises/${id}`)}>View exercises</div>
             </div>
         </div>
     </div>

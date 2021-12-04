@@ -3,6 +3,21 @@ import { ITreeNode, tree } from "./views/TreePage/TreePage";
 
 export const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
+export const findParentNode = (name: string, node: ITreeNode, parent?: ITreeNode): ITreeNode | undefined => {
+    if (node.name === name) {
+        return parent;
+    }
+    if (!node.children.length) {
+        return undefined;
+    }
+    for (const child of node.children) {
+        const parentNode = findParentNode(name, child, node);
+        if (parentNode) {
+            return parentNode;
+        }
+    }
+};
+
 export const flatten = (node: ITreeNode): ITreeNode[] => {
     let currLevel = [node];
     let nextLevel = node.children;

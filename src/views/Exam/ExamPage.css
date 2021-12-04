@@ -134,6 +134,11 @@
     justify-content: center;
 }
 
+.examContentTreeRow {
+    display: flex;
+    justify-content: center;
+}
+
 .examContentTreeNode {
     width: 200px;
     background-color: #36393D;
@@ -141,7 +146,7 @@
     height: 30px;
     line-height: 30px;
     font-size: 18px;
-    margin: 0 auto;
+    margin: 0 10px;
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 1px 1px 0 #36393D;
@@ -161,6 +166,16 @@
 .examContentTreeNodeConnector {
     width: 50%;
     height: 50px;
+}
+
+.examContentTreeRow:nth-child(2) .examContentTreeNodeConnectorRow,
+.examContentTreeRow:nth-child(2) .examContentTreeNodeConnector  {
+    height: 25px;
+}
+
+.examContentTreeRow .examContentTreeNodeConnectorRowBox:only-of-type,
+.examContentTreeRow .examContentTreeNodeConnectorRowBox:only-of-type .examContentTreeNodeConnector  {
+    height: 100px;
 }
 
 .examContentTreeNodeConnector:first-child {

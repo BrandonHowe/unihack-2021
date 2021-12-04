@@ -70,20 +70,16 @@
     background-color: #36393D;
     border-radius: 10px;
     height: 30px;
-    font-size: 18px;
+    font-size: 16px;
     margin: auto;
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 1px 1px 0 #36393D;
     padding: 10px;
     position: relative;
-    transition: all .3s ease;
+    transition: all .3s cubic-bezier(0.5, 0.0, 0.5, 1.0);
     overflow: hidden;
     user-select: none;
-}
-
-.treeNode.complete {
-    border: 2px solid #A1DDA4;
 }
 
 .treeNodeText {
@@ -101,7 +97,14 @@
 
 .treeNodeIcon {
     position: absolute;
-    right: 10px;
+    right: 8px;
+    top: 14px;
+    transition: transform .3s ease;
+}
+
+.treeNodeCheck {
+    position: absolute;
+    left: 8px;
     top: 14px;
     transition: transform .3s ease;
 }
@@ -119,6 +122,7 @@
 .treeNodeTopRow,
 .treeNodeBottomRow {
     display: flex;
+    transition: all 0.3s cubic-bezier(0.5, 0.0, 0.5, 1.0);
 }
 
 .treeNodeTopRowBox,
@@ -127,6 +131,7 @@
     width: 50%;
     border-left: 3px solid #4565EF;
     border-right: 3px solid #4565EF;
+    transition: all 0.3s cubic-bezier(0.5, 0.0, 0.5, 1.0);
 }
 
 .treeNodeTopRowBox {

@@ -2,13 +2,13 @@ import "./ExamPage.css";
 import { ITreeNode, tree } from "../TreePage/TreePage";
 import { MouseEventHandler, useRef, useState } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
-import { findNodeByName, flatten } from "../../helpers";
+import { findNodeByName, findParentNode, flatten } from "../../helpers";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ReactMarkdown from "react-markdown";
 import RemarkMathPlugin from 'remark-math';
 import rehypeKatex from "rehype-katex";
 import 'katex/dist/katex.min.css';
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Markdown from "../../components/Markdown/Markdown";
 import LoremIpsum from "../Article/LoremIpsum";
 
@@ -34,26 +34,28 @@ Move terms onto one side: $-x + 1 = 0$
 Solve for x: $x = 1$
 `
 
-const initialQuestions: Question[] = [
-    { x: 58, y: 170, width: 289, height: 21, solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
-    { x: 58, y: 192, width: 476, height: 42, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-    { x: 58, y: 234, width: 407, height: 21, solution: p3Solution, topic: findNodeByName("Logarithms")! },
-    { x: 58, y: 255, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-    { x: 58, y: 292, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
-    { x: 58, y: 329, width: 368, height: 33, solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
-    { x: 68, y: 387, width: 457, height: 50, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-    { x: 58, y: 437, width: 158, height: 20, solution: "just solve it rofl", topic: findNodeByName("Determinants")! },
-    { x: 58, y: 457, width: 440, height: 23, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-    { x: 58, y: 480, width: 336, height: 20, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-    { x: 58, y: 505, width: 473, height: 28, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-    { x: 58, y: 533, width: 128, height: 15, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-    { x: 58, y: 548, width: 406, height: 14, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-    { x: 58, y: 562, width: 351, height: 23, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-    { x: 68, y: 608, width: 270, height: 27, solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
-    { x: 58, y: 635, width: 214, height: 42, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-    { x: 58, y: 673, width: 371, height: 19, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-    { x: 58, y: 692, width: 430, height: 51, solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
-    { x: 58, y: 743, width: 204, height: 37, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+const initialQuestions: Question[][] = [
+    [
+        { x: 58, y: 170, width: 289, height: 21, solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
+        { x: 58, y: 192, width: 476, height: 42, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+        { x: 58, y: 234, width: 407, height: 21, solution: p3Solution, topic: findNodeByName("Logarithms")! },
+        { x: 58, y: 255, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+        { x: 58, y: 292, width: 476, height: 37, solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
+        { x: 58, y: 329, width: 368, height: 33, solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
+        { x: 68, y: 387, width: 457, height: 50, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+        { x: 58, y: 437, width: 158, height: 20, solution: "just solve it rofl", topic: findNodeByName("Determinants")! },
+        { x: 58, y: 457, width: 440, height: 23, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+        { x: 58, y: 480, width: 336, height: 20, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+        { x: 58, y: 505, width: 473, height: 28, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+        { x: 58, y: 533, width: 128, height: 15, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+        { x: 58, y: 548, width: 406, height: 14, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+        { x: 58, y: 562, width: 351, height: 23, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+        { x: 68, y: 608, width: 270, height: 27, solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
+        { x: 58, y: 635, width: 214, height: 42, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+        { x: 58, y: 673, width: 371, height: 19, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+        { x: 58, y: 692, width: 430, height: 51, solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
+        { x: 58, y: 743, width: 204, height: 37, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+    ]
 ];
 
 const emojiDifficulties = ["😭", "😢", "🙂", "😁"];
@@ -67,11 +69,12 @@ const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: numb
 }
 
 export default function ExamPage() {
+    const { id } = useParams();
     const [_, setNumPages] = useState<unknown>(null);
     const [pageNumber, __] = useState(1);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
     const [solutionOpen, setSolutionOpen] = useState(false);
-    const [questions, setQuestions] = useState(initialQuestions);
+    const [questions, setQuestions] = useState(initialQuestions[Number(id) - 1]);
 
     const documentRef = useRef<HTMLDivElement>(null);
 
@@ -94,21 +97,6 @@ export default function ExamPage() {
         setNumPages(numPages);
     }
 
-    const findParentNode = (name: string, node: ITreeNode, parent?: ITreeNode): ITreeNode | undefined => {
-        if (node.name === name) {
-            return parent;
-        }
-        if (!node.children.length) {
-            return undefined;
-        }
-        for (const child of node.children) {
-            const parentNode = findParentNode(name, child, node);
-            if (parentNode) {
-                return parentNode;
-            }
-        }
-    };
-
     const handleDocumentClick: MouseEventHandler<HTMLDivElement> = (e) => {
         const rect = documentRef.current!.getBoundingClientRect();
         const x = e.clientX - rect.left; //x position within the element.
@@ -125,6 +113,13 @@ export default function ExamPage() {
     const currNode = selectedQuestion?.topic;
     const parentNode = currNode && findParentNode(currNode.name, tree.nodes[0]);
     const doubleParentNode = parentNode && findParentNode(parentNode.name, tree.nodes[0]);
+
+    let secondParentNode, secondDoubleParentNode;
+
+    if (currNode?.otherParent) {
+        secondParentNode = currNode.otherParent;
+        secondDoubleParentNode = findParentNode(secondParentNode.name, tree.nodes[0]);
+    }
 
     const flattenedNodes: ITreeNode[] = flatten(tree.nodes[0]);
     
@@ -143,51 +138,83 @@ export default function ExamPage() {
         </div>
         <div className="examContent">
             <h2>Additional help</h2>
-            <div style={{ overflowY: "auto", maxHeight: "calc(100vh - 700px)" }}>
+            <div style={{ overflowY: "auto", height: `calc(100vh - ${selectedQuestion ? 700 : 566}px)` }}>
                 <Markdown content={LoremIpsum} />
             </div>
             <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>
             <div className="examContentButton" onClick={() => setSolutionOpen(true)}>See solution to this problem</div>
             <h2>Knowledge tree</h2>
             <div className="examContentKnowledgeTree">
-                { doubleParentNode && <>
-                    <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${doubleParentNode.name.split(" ").join("_")}`}>
-                        <div className="examContentTreeNode">
-                            { doubleParentNode.name }
+                <div className="examContentTreeRow">
+                    { doubleParentNode && <div>
+                        <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${doubleParentNode.name.split(" ").join("_")}`}>
+                            <div className="examContentTreeNode">
+                                { doubleParentNode.name }
+                            </div>
+                        </Link>
+                        <div className="examContentTreeNodeConnectorRow">
+                            <div className="examContentTreeNodeConnector"></div>
+                            <div className="examContentTreeNodeConnector"></div>
                         </div>
-                    </Link>
-                    <div className="examContentTreeNodeConnectorRow">
-                        <div className="examContentTreeNodeConnector"></div>
-                        <div className="examContentTreeNodeConnector"></div>
-                    </div>
-                </> }
-                { parentNode && <>
-                    <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${parentNode.name.split(" ").join("_")}`}>
-                        <div className="examContentTreeNode">
-                            { parentNode.name }
+                    </div> }
+                    { secondDoubleParentNode && <div>
+                        <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${secondDoubleParentNode.name.split(" ").join("_")}`}>
+                            <div className="examContentTreeNode">
+                                { secondDoubleParentNode.name }
+                            </div>
+                        </Link>
+                        <div className="examContentTreeNodeConnectorRow">
+                            <div className="examContentTreeNodeConnector"></div>
+                            <div className="examContentTreeNodeConnector"></div>
                         </div>
-                    </Link>
-                    <div className="examContentTreeNodeConnectorRow">
-                        <div className="examContentTreeNodeConnector"></div>
-                        <div className="examContentTreeNodeConnector"></div>
-                    </div>
-                </> }
+                    </div> }
+                </div>
+                <div className="examContentTreeRow">
+                    { parentNode && <div className="examContentTreeNodeConnectorRowBox">
+                        <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${parentNode.name.split(" ").join("_")}`}>
+                            <div className="examContentTreeNode">
+                                { parentNode.name }
+                            </div>
+                        </Link>
+                        <div className="examContentTreeNodeConnectorRow">
+                            <div className="examContentTreeNodeConnector"></div>
+                            <div className="examContentTreeNodeConnector"></div>
+                        </div>
+                    </div> }
+                    { secondParentNode && <div className="examContentTreeNodeConnectorRowBox">
+                        <Link style={{ width: 220, margin: "0 auto" }} to={`/module/${secondParentNode.name.split(" ").join("_")}`}>
+                            <div className="examContentTreeNode">
+                                { secondParentNode.name }
+                            </div>
+                        </Link>
+                        <div className="examContentTreeNodeConnectorRow">
+                            <div className="examContentTreeNodeConnector"></div>
+                            <div className="examContentTreeNodeConnector"></div>
+                        </div>
+                    </div> }
+                </div>
+                { secondParentNode && <div className="examContentTreeNodeConnectorRow" style={{ height: 25, width: 246, margin: "0 auto" }}>
+                    <div className="examContentTreeNodeConnector" style={{ height: 25, borderTop: "6px solid #4565EF" }}></div>
+                    <div className="examContentTreeNodeConnector" style={{ height: 25, borderTop: "6px solid #4565EF" }}></div>
+                </div>}
                 { currNode && <Link to={`/module/${currNode.name.split(" ").join("_")}`}>
-                    <div className="examContentTreeNode">
+                    <div className="examContentTreeNode" style={{ margin: "0 auto" }}>
                         { currNode.name }
                     </div>
                 </Link> }
             </div>
-            <h2>Question options</h2>
-            <label htmlFor="questionDifficulty">Question difficulty</label>
-            <br />
-            <select id="questionDifficulty" value={selectedQuestion?.difficulty} onChange={e => questionDifficulty(Number(e.target.value) ?? undefined)}>
-                <option value={undefined}>I did not solve the problem yet</option>
-                <option value={0}>I couldn't solve the problem</option>
-                <option value={1}>I solved the problem with difficulty</option>
-                <option value={2}>I solved the problem with little difficulty</option>
-                <option value={3}>I could solve the problem easily</option>
-            </select>
+            { selectedQuestion && <>
+                <h2>Question options</h2>
+                <label htmlFor="questionDifficulty">Question difficulty</label>
+                <br />
+                <select id="questionDifficulty" value={selectedQuestion?.difficulty} onChange={e => questionDifficulty(Number(e.target.value) ?? undefined)}>
+                    <option value={undefined}>I did not solve the problem yet</option>
+                    <option value={0}>I couldn't solve the problem</option>
+                    <option value={1}>I solved the problem with difficulty</option>
+                    <option value={2}>I solved the problem with little difficulty</option>
+                    <option value={3}>I could solve the problem easily</option>
+                </select>
+            </> }
         </div>
         { solutionOpen && <div className="solutionModal" id="solutionModal" onClick={e => { if ((e.target as any).id === "solutionModal") setSolutionOpen(false) }}>
             <div className="solutionModalContent">

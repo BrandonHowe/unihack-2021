@@ -3,3 +3,12 @@
     padding: 0 120px;
     text-align: left;
 }
+
+.finishQuiz {
+    transition: all 0.3s ease;
+}
+
+.finishQuiz.disabled {
+    cursor: not-allowed;
+    background-color: #B3BDE2;
+}
