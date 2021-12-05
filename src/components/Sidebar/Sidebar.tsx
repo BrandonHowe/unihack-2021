@@ -53,7 +53,7 @@ export default function Sidebar() {
                 <h3>Mathematics</h3>
             </div>
         </Link>
-        <div className="sidebarTopicList" style={{ height: examListOpen ? 160 : 60 }}>
+        <div className="sidebarTopicList" style={{ height: examListOpen ? 210 : 60 }}>
             <div className="sidebarTopicListHeader" onClick={() => setExamListOpen(!examListOpen)}>
                 <h3>Exam models</h3>
                 <Icon
@@ -74,9 +74,9 @@ export default function Sidebar() {
                         Bac M2
                     </div>
                 </Link>
-                <Link to="/difficultExercises" style={{ textDecoration: "none", color: "inherit" }}>
-                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/difficultExercises") ? "#4E5156" : "inherit" }}>
-                        Difficult exercises
+                <Link to="/difficultProblems" style={{ textDecoration: "none", color: "inherit" }}>
+                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/difficultProblems") ? "#4E5156" : "inherit" }}>
+                        Difficult problems
                     </div>
                 </Link>
             </> }

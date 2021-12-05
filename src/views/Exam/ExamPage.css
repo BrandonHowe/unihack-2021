@@ -239,3 +239,30 @@ a {
     border-radius: 5px;
     margin: 5px auto 0 auto;
 }
+
+.emojiSelect {
+    appearance: none;
+    background-color: white;
+    border: 1px solid #999;
+    border-radius: 5px;
+    width: 28px;
+    text-align: center;
+}
+
+.emojiDropdown {
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.emojiDropdownChild {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.emojiDropdownChild:hover {
+    background-color: #bbb;
+}

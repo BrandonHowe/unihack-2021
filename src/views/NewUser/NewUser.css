@@ -9,7 +9,7 @@
     width: 400px;
 }
 
-select {    
+.newUserPage select {    
     background-color: #414349;
     border: 2px solid #37383D;
     border-radius: 3px;
@@ -35,7 +35,7 @@ select {
       1px 1.5em;
     background-repeat: no-repeat;
 }
-select:focus {
+.newUserPage select:focus {
     background-image:
       linear-gradient(45deg, gray 50%, transparent 50%),
       linear-gradient(135deg, transparent 50%, gray 50%);

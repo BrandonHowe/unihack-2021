@@ -92,7 +92,7 @@ const initialQuestions: Question[][][] = localStorage.getItem("questions") ? JSO
     ]
 ];
 
-const emojiDifficulties = ["😭", "😢", "🙂", "😁"];
+const emojiDifficulties = ["❌", "😭", "😢", "🙂", "😁"];
 
 const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: number, width: number, height: number }) => {
     if (point.x < rect.x) return false;
@@ -107,14 +107,23 @@ const exams = [
     "https://profesorjitaruionel.com/wp-content/uploads/2021/02/E_c_matematica_M_st-nat_2021_Test_01.pdf"
 ]
 
+function EmojiDropdown({ value, setValue }: { value: string, setValue: (v: string) => void }) {
+    const [opened, setOpened] = useState(false);
+
+    return <div className="emojiDropdown" style={{ height: opened ? 120 : 24, width: 24, border: "1px solid transparent", zIndex: opened ? 10 : 8 }}>
+        {/* <span style={{ position: "absolute", left: l.x - 20, top: l.y, color: "black" }}>{emojiDifficulties[l.difficulty || 0]}</span> */}
+        <div className="emojiDropdownChild" onClick={() => setOpened(!opened)}>{ value }</div>
+        { opened && emojiDifficulties.filter(l => l !== value).map(l => <div className="emojiDropdownChild" onClick={() => { setOpened(!opened); setValue(l) }}>{l}</div> )}
+    </div>
+}
+
 export default function ExamPage() {
     const { id } = useParams();
     const [numPages, setNumPages] = useState<number>(0);
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
     const [solutionOpen, setSolutionOpen] = useState(false);
-    const [showDifficulty, setShowDifficulty] = useState(false);
-    const [questions, setQuestions] = useState(ObservableSlim.create(initialQuestions, true, function(changes) {
+    const [questions, setQuestions] = useState<Question[][][]>(ObservableSlim.create(initialQuestions, true, function(changes) {
         localStorage.setItem("questions", JSON.stringify(initialQuestions));
     }));
 
@@ -136,18 +145,19 @@ export default function ExamPage() {
         }
     }
 
-    const questionDifficulty = (difficulty: number | undefined) => {
-        console.log(selectedQuestion, difficulty);
-        if (selectedQuestion) {
+    const questionDifficulty = (difficulty: number | undefined, question: Question | null = selectedQuestion) => {
+        console.log(question, difficulty, difficulty === undefined || isNaN(difficulty) || difficulty === -1);
+        if (question) {
             if (difficulty === undefined || isNaN(difficulty) || difficulty === -1) {
-                delete selectedQuestion.difficulty;
-                delete questions[Number(id) - 1][pageNumber - 1].find(l => l.y === selectedQuestion.y)!.difficulty;
+                delete question.difficulty;
+                delete questions[Number(id) - 1][pageNumber - 1].find(l => l.y === question.y)!.difficulty;
             } else {
-                selectedQuestion.difficulty = difficulty;
-                questions[Number(id) - 1][pageNumber - 1].find(l => l.y === selectedQuestion.y)!.difficulty = difficulty;
+                question.difficulty = difficulty;
+                questions[Number(id) - 1][pageNumber - 1].find(l => l.y === question.y)!.difficulty = difficulty;
             }
             setQuestions([...questions]);
-            setSelectedQuestion({...selectedQuestion});
+            setSelectedQuestion({...question});
+            console.log(questions);
         }
     };
 
@@ -166,7 +176,6 @@ export default function ExamPage() {
             if (pointInRect({ x, y }, question)) {
                 console.log("Question yo", question.topic.name);
                 setSelectedQuestion(question);
-                setShowDifficulty(true);
 
                 const region = new Path2D();
                 region.rect(question.x, question.y, question.width, question.height);
@@ -224,18 +233,8 @@ export default function ExamPage() {
                     </div>
                 </div>
                 { selectedQuestion && <div style={{ position: "absolute", left: selectedQuestion.x, top: selectedQuestion.y, width: selectedQuestion.width, height: selectedQuestion.height, backgroundColor: "rgba(177, 185, 249, 0.5)", borderRadius: 7 }}></div> }
-                { selectedQuestion && showDifficulty && <div style={{ position: "absolute", zIndex: 100, left: selectedQuestion.x + selectedQuestion.width + 10, top: selectedQuestion.y, width: 270, backgroundColor: "#292B2F", padding: 5, borderRadius: 5, textAlign: "left" }}>
-                    <label htmlFor="questionDifficulty">Question difficulty</label>
-                    <br />
-                    <select style={{ width: 270, margin: "10px 0 0 0" }} id="questionDifficulty" value={selectedQuestion?.difficulty ?? -1} onChange={e => { questionDifficulty(Number(e.target.value) ?? undefined); setShowDifficulty(false) }}>
-                        <option value={-1}>I did not solve the problem yet</option>
-                        <option value={0}>I couldn't solve the problem</option>
-                        <option value={1}>I solved the problem with difficulty</option>
-                        <option value={2}>I solved the problem with little difficulty</option>
-                        <option value={3}>I could solve the problem easily</option>
-                    </select>
-                </div> }
-                { questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).map(l => <span style={{ position: "absolute", left: l.x - 20, top: l.y, color: "black" }}>{emojiDifficulties[l.difficulty || 0]}</span>) }
+                { selectedQuestion && !questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).includes(selectedQuestion) && <div style={{ position: "absolute", left: selectedQuestion.x - 26, top: selectedQuestion.y, color: "black", width: 20 }}><EmojiDropdown value={emojiDifficulties[(selectedQuestion.difficulty ?? -1) + 1]} setValue={v => questionDifficulty(emojiDifficulties.indexOf(v) - 1) } /></div> }
+                { questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).map(l => <div style={{ position: "absolute", left: l.x - 26, top: l.y, color: "black", width: 20 }}><EmojiDropdown value={emojiDifficulties[(l.difficulty ?? -1) + 1]} setValue={v => questionDifficulty(emojiDifficulties.indexOf(v) - 1, l)} /></div>) }
             </div>
         </div>
         <div className="examContent">
@@ -246,7 +245,7 @@ export default function ExamPage() {
             <div className="examContentButtons">
                 <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>
                 <div className="examContentButton" onClick={() => selectedQuestion && setSolutionOpen(true)}>See solution to this problem</div>
-                <Link to="/difficultProblems"><div className="examContentButton">See difficult exercises</div></Link>
+                <Link to="/difficultProblems"><div className="examContentButton">See difficult problems</div></Link>
             </div>
             <h2>Knowledge tree</h2>
             <div className="examContentKnowledgeTree">
