@@ -1,13 +1,18 @@
 .treePage {
-    background-color: #36393F;
-    min-height: 100vh;
+    height: 100vh;
     font-family: "Whitney";
-    overflow-x: auto;
+    overflow: hidden;
     background-image: radial-gradient(#929292 4%, transparent 8%);
     background-color: #454950;
     background-position: 300px -300px, 5px 5px;
     background-size: 25px 25px;
     padding-right: 20px;
+    position: relative;
+    user-select: none;
+}
+
+.treePageContent {
+    position: absolute;
 }
 
 .landingPageLogo {

@@ -520,7 +520,6 @@ const treeRaw: ITree = grabFromLS() || {
 }
 
 export const tree = ObservableSlim.create(treeRaw, true, function(changes) {
-	console.log(JSON.stringify(changes), treeRaw);
     localStorage.setItem("sincos", JSON.stringify(sinAndCos));
     localStorage.setItem("tree", JSON.stringify(treeRaw));
 });
@@ -532,8 +531,6 @@ function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode,
     const nodeRef = useRef<HTMLDivElement>(null);
 
     const [opened, setOpened] = useState(false);
-
-    console.log(quizScore, quizQuestions.reduce((acc, cur) => acc + cur.points, 0), (quizScore || 0) / (quizQuestions.reduce((acc, cur) => acc + cur.points, 0)));
 
     const complete = (topics.length > 0 && topics.every(l => l.complete)) || ((quizScore || 0) / (quizQuestions.reduce((acc, cur) => acc + cur.points, 0)) >= 0.8);
 
@@ -580,8 +577,6 @@ function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode,
             currentLevel2 = [...nextLevel2];
             nextLevel2 = [];
         }
-        console.log(levels2);
-        console.log("ASDJF", levels2.findIndex(l => l.includes(node)), secondChild && levels2.findIndex(l => l.includes(secondChild)))
         secondLevelDiff = levels2.findIndex(l => l.includes(secondChild)) - levels2.findIndex(l => l.includes(node));
     }
 
@@ -644,7 +639,7 @@ function TreeLevel({ contents, firstLevel, elementMap, setElementMap }: { conten
     return <div className="treeLevel">
         {
             contents.map(j => (
-                <div className="treeNodeContainer">
+                <div className="treeNodeContainer" key={`4u2893jfad${j.name}`}>
                     <TreeNode node={j} first={!firstLevel} elementMap={elementMap} setElementMap={setElementMap} />
                 </div>
             ))
@@ -656,6 +651,46 @@ export default function TreePage() {
     const levels: ITreeNode[][] = [];
     let currentLevel = tree.nodes;
     let nextLevel: ITreeNode[] = [];
+
+    let [lastScrollX, setLastScrollX] = useState(0);
+    let [lastScrollY, setLastScrollY] = useState(0);
+    const [scrollX, setScrollX] = useState(0);
+    const [scrollY, setScrollY] = useState(0);
+
+    const onMouseMove = (e: MouseEvent) => {
+        console.log("Moving", lastScrollX, lastScrollY, e.clientX, e.clientY);
+        if (lastScrollX === 0 || lastScrollY === 0) {
+            console.log("Updating last scroll");
+            lastScrollX = e.clientX;
+            lastScrollY = e.clientY;
+            setLastScrollX(e.clientX);
+            setLastScrollY(e.clientY);
+        } else {
+            const newScrollX = scrollX + e.clientX - lastScrollX;
+            const newScrollY = scrollY + e.clientY - lastScrollY;
+            setScrollX(newScrollX);
+            setScrollY(newScrollY);
+        }
+    };
+
+    const stopScrolling = () => {
+        console.log("Stopping");
+        toggleScrolling(false);
+        setLastScrollX(0);
+        setLastScrollY(0);
+    }
+
+    const toggleScrolling = (enable: boolean) => {
+        if (enable) {
+            console.log("Enabling");
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', stopScrolling);
+        } else {
+            console.log("Disabling");
+            document.removeEventListener('mouseup', stopScrolling);
+            document.removeEventListener('mousemove', onMouseMove);
+        }
+    }
 
     const [elementMap, setElementMap] = useState<Record<string, boolean>>({});
 
@@ -669,23 +704,27 @@ export default function TreePage() {
         nextLevel = [];
     }
 
-    return <div className="treePage">
-        <div className="treeKey">
-            <h2>Unit key</h2>
-            { treeCategories.map(l => <h3><span style={{ color: l.color }}>{l.colorName}</span><span> - {l.name}</span></h3>) }
-        </div>
-        <div style={{ display: "inline-block" }}>
-            <div className="landingPageLogo">
-                <img src={logo} alt="Logo" />
+    return <div className="treePage" onMouseDown={(e) => { console.log(e); toggleScrolling(true) }}>
+        <div className="treePageContent" style={{ top: scrollY, left: scrollX + window.innerWidth / 2 - 300 }}>
+            <div className="treeKey">
+                <h2>Unit key</h2>
+                { treeCategories.map(l => <h3 key={`caditjiasdjf${l.name}`}><span style={{ color: l.color }}>{l.colorName}</span><span> - {l.name}</span></h3>) }
             </div>
-            <Link to="/exam/1">
-                <div className="treeHeader">
-                    <img src={tree.image} alt="TreeImage" />
-                    <h3>{tree.name}</h3>
+            <div style={{ display: "inline-block" }}>
+                <div className="landingPageLogo">
+                    <img src={logo} alt="Logo" />
                 </div>
-            </Link>
-            <div style={{ marginBottom: 50, display: "inline-block", width: "100%" }}>
-                <TreeLevel elementMap={elementMap} setElementMap={setElementMap} firstLevel={true} contents={levels[0]} />
+                <div style={{ width: 220, margin: "auto" }}>
+                    <Link to="/exam/1" style={{ width: 220 }}>
+                        <div className="treeHeader">
+                            <img src={tree.image} alt="TreeImage" />
+                            <h3>{tree.name}</h3>
+                        </div>
+                    </Link>
+                </div>
+                <div style={{ marginBottom: 50, display: "inline-block", width: "100%" }}>
+                    <TreeLevel elementMap={elementMap} setElementMap={setElementMap} firstLevel={true} contents={levels[0]} />
+                </div>
             </div>
         </div>
     </div>
