@@ -74,6 +74,11 @@ export default function Sidebar() {
                         Bac M2
                     </div>
                 </Link>
+                <Link to="/difficultExercises" style={{ textDecoration: "none", color: "inherit" }}>
+                    <div className="sidebarTopic" style={{ backgroundColor: location.pathname.startsWith("/difficultExercises") ? "#4E5156" : "inherit" }}>
+                        Difficult exercises
+                    </div>
+                </Link>
             </> }
         </div>
         { flattenedNodes.map(l => <SidebarTopicList node={l} />) }

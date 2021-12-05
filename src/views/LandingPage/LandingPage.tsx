@@ -23,9 +23,9 @@ export default function LandingPage() {
         <div className="landingPageLogo">
             <img src={logo} alt="Logo" />
         </div>
-        <h5 style={{ fontSize: 18 }}>Discover what knowledge you are missing and put it all together. No more barriers or secrets.<br />The knowledge tree of the world is in your hands.</h5>
-        <Link to="/newUser" style={{ textDecoration: "none", color: "inherit" }}><div className="landingPageCheckOutButton">Get started</div></Link>
-        <h5 style={{ fontSize: 18 }}>Or check out our modules directly...</h5>
+        <h5 style={{ fontSize: 20 }}>Discover what knowledge you are missing and put it all together. No more barriers or secrets.<br />The knowledge tree of the world is in your hands.</h5>
+        <Link to="/newUser" style={{ textDecoration: "none", color: "inherit", width: 200, margin: "0 auto" }}><div className="landingPageCheckOutButton">Get started</div></Link>
+        <h5 style={{ fontSize: 20 }}>Or check out our modules directly...</h5>
         <div className="landingPageModuleList">
             <LandingPageModule image={math} name="Mathematics" description="Full curriculum available right now, from Algebra and Geometry to Matrices and Calculus." url="/" />
             <LandingPageModule image={microscope} name="Biology" description="Full curriculum available right now, from environmental biology to full body anatomy." url="/" />

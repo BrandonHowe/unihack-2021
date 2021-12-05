@@ -9,7 +9,7 @@
 
 .landingPageLogo > img {
     margin-top: 50px;
-    width: 500px;
+    width: 550px;
     filter: drop-shadow(0 2px 4px #292B2F);
 }
 
@@ -20,7 +20,7 @@
     border-radius: 10px;
     height: 50px;
     line-height: 50px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bold;
     margin: 40px auto 20px auto;
 }
@@ -32,6 +32,7 @@
 .landingPageModule {
     width: 300px;
     background-color: #292B2F;
+    box-shadow: 0 2px 7px 0 #292B2F;
     padding: 20px;
     border-radius: 20px;
     display: inline-block;
