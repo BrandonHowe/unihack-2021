@@ -13,8 +13,53 @@ export default function NewUserPage() {
         if (grade === 8) {
             tree.nodes[0].completedInSchool = true;
             findNodeByName("Systems of Equations")!.completedInSchool = true;
-            navigate("/tree");
+        } else if (grade === 9) {
+            tree.nodes[0].completedInSchool = true;
+            findNodeByName("Systems of Equations")!.completedInSchool = true;
+            findNodeByName("Geometry")!.completedInSchool = true;
+            findNodeByName("Factoring")!.completedInSchool = true;
+            findNodeByName("Quadratics")!.completedInSchool = true;
+        } else if (grade === 10) {
+            tree.nodes[0].completedInSchool = true;
+            findNodeByName("Systems of Equations")!.completedInSchool = true;
+            findNodeByName("Geometry")!.completedInSchool = true;
+            findNodeByName("Factoring")!.completedInSchool = true;
+            findNodeByName("Quadratics")!.completedInSchool = true;
+            findNodeByName("Trigonometry")!.completedInSchool = true;
+            findNodeByName("Complex numbers")!.completedInSchool = true;
+            findNodeByName("Exponentials")!.completedInSchool = true;
+            findNodeByName("Logarithms")!.completedInSchool = true;
+        } else if (grade === 11) {
+            tree.nodes[0].completedInSchool = true;
+            findNodeByName("Systems of Equations")!.completedInSchool = true;
+            findNodeByName("Geometry")!.completedInSchool = true;
+            findNodeByName("Factoring")!.completedInSchool = true;
+            findNodeByName("Quadratics")!.completedInSchool = true;
+            findNodeByName("Trigonometry")!.completedInSchool = true;
+            findNodeByName("Complex numbers")!.completedInSchool = true;
+            findNodeByName("Exponentials")!.completedInSchool = true;
+            findNodeByName("Logarithms")!.completedInSchool = true;
+            findNodeByName("Matrices")!.completedInSchool = true;
+            findNodeByName("Determinants")!.completedInSchool = true;
+            findNodeByName("Rational functions")!.completedInSchool = true;
+        } else if (grade === 12) {
+            tree.nodes[0].completedInSchool = true;
+            findNodeByName("Systems of Equations")!.completedInSchool = true;
+            findNodeByName("Geometry")!.completedInSchool = true;
+            findNodeByName("Factoring")!.completedInSchool = true;
+            findNodeByName("Quadratics")!.completedInSchool = true;
+            findNodeByName("Trigonometry")!.completedInSchool = true;
+            findNodeByName("Complex numbers")!.completedInSchool = true;
+            findNodeByName("Exponentials")!.completedInSchool = true;
+            findNodeByName("Logarithms")!.completedInSchool = true;
+            findNodeByName("Matrices")!.completedInSchool = true;
+            findNodeByName("Determinants")!.completedInSchool = true;
+            findNodeByName("Rational functions")!.completedInSchool = true;
+            findNodeByName("Limits")!.completedInSchool = true;
+            findNodeByName("Derivatives")!.completedInSchool = true;
+            findNodeByName("Integrals")!.completedInSchool = true;
         }
+        navigate("/tree");
     }
 
     return <div className="newUserPage">

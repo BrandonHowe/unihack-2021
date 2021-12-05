@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import Question from "../../components/Question/Question";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { findTopicByName } from "../../helpers";
-import { IQuestion, ITopic, ITreeNode } from "../TreePage/TreePage";
+import { IQuestion, ITopic } from "../TreePage/TreePage";
 import "./SimilarExercises.css";
 
 const questions: (IQuestion & { topic: string })[] = [
@@ -66,27 +66,27 @@ const questions: (IQuestion & { topic: string })[] = [
 export default function SimilarExercises() {
     const { id } = useParams();
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const modifiedId = id?.split("_").join(" ") || "";
 
-    const [moduleData, setModuleData] = useState<ITreeNode | null>(null);
+    // const [moduleData, setModuleData] = useState<ITreeNode | null>(null);
     const [topicData, setTopicData] = useState<ITopic | null>(null);
 
     const [questionsCompleted, setQuestionsCompleted] = useState<boolean[]>([]);
 
     const getTopicContent = async () => {
         const matchingModule = findTopicByName(modifiedId);
-        setModuleData(matchingModule || null);
+        // setModuleData(matchingModule || null);
         setTopicData(matchingModule?.topics.find(l => l.name === modifiedId) || null);
     }
 
-    const submit = () => {
-        if (topicData) {
-            topicData.complete = true;
-            navigate(`/module/${moduleData!.name.split(" ").join("_")}`);
-        }
-    }
+    // const submit = () => {
+    //     if (topicData) {
+    //         topicData.complete = true;
+    //         navigate(`/module/${moduleData!.name.split(" ").join("_")}`);
+    //     }
+    // }
 
     useEffect(() => {
         getTopicContent()

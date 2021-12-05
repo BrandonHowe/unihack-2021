@@ -2,7 +2,7 @@ import "./TreePage.css"
 import logo from "../../assets/logo.png";
 import Icon from '@mdi/react';
 import { mdiCheck, mdiChevronDown, mdiCircleHalfFull, mdiSchool } from '@mdi/js';
-import knowledge from "../../assets/knowledge.png";
+import math from "../../assets/math.png";
 import { useEffect, useRef, useState } from "react";
 import { findParentNode, flatten, genRandomArticle } from "../../helpers";
 import ArcArticle from "./ArcArticle";
@@ -111,7 +111,7 @@ const grabFromLS = () => {
 
 const treeRaw: ITree = grabFromLS() || {
     name: "Mathematics",
-    image: knowledge,
+    image: math,
     nodes: [
         {
             name: "Linear Equations",
@@ -526,13 +526,11 @@ export const tree = ObservableSlim.create(treeRaw, true, function(changes) {
 
 
 function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode, first?: boolean, elementMap: Record<string, boolean>, setElementMap: (v: Record<string, boolean>) => void }) {
-    const { name, category, topics, children, quizScore, quizQuestions } = node;
+    const { name, category, topics, children } = node;
 
     const nodeRef = useRef<HTMLDivElement>(null);
 
     const [opened, setOpened] = useState(false);
-
-    const complete = (topics.length > 0 && topics.every(l => l.complete)) || ((quizScore || 0) / (quizQuestions.reduce((acc, cur) => acc + cur.points, 0)) >= 0.8);
 
     const levels: ITreeNode[][] = [];
     let currentLevel = children;
@@ -547,14 +545,6 @@ function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode,
         currentLevel = [...nextLevel];
         nextLevel = [];
     }
-
-    const widthNeeded = (node: Pick<ITreeNode, "children">): number => {
-        if (node.children.length >= 2) {
-            return node.children.reduce((acc, cur) => acc + widthNeeded(cur), 0)
-        } else {
-            return 300;
-        }
-    };
 
     const flattenedNodes: ITreeNode[] = flatten(tree.nodes[0]);
 
@@ -585,9 +575,7 @@ function TreeNode({ node, first, elementMap, setElementMap }: { node: ITreeNode,
         if (parentNode) {
             setShortened(Boolean(elementMap[parentNode.name]));
         }
-    }, [elementMap, node.name])
-    
-    const width = widthNeeded({ children });
+    }, [elementMap, node.name]);
 
     return <div className="treeNodeArea" ref={nodeRef}>
         { first && <div className="treeNodeTopRow">
@@ -658,9 +646,7 @@ export default function TreePage() {
     const [scrollY, setScrollY] = useState(0);
 
     const onMouseMove = (e: MouseEvent) => {
-        console.log("Moving", lastScrollX, lastScrollY, e.clientX, e.clientY);
         if (lastScrollX === 0 || lastScrollY === 0) {
-            console.log("Updating last scroll");
             lastScrollX = e.clientX;
             lastScrollY = e.clientY;
             setLastScrollX(e.clientX);
@@ -674,7 +660,6 @@ export default function TreePage() {
     };
 
     const stopScrolling = () => {
-        console.log("Stopping");
         toggleScrolling(false);
         setLastScrollX(0);
         setLastScrollY(0);
@@ -682,11 +667,9 @@ export default function TreePage() {
 
     const toggleScrolling = (enable: boolean) => {
         if (enable) {
-            console.log("Enabling");
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', stopScrolling);
         } else {
-            console.log("Disabling");
             document.removeEventListener('mouseup', stopScrolling);
             document.removeEventListener('mousemove', onMouseMove);
         }
@@ -704,7 +687,7 @@ export default function TreePage() {
         nextLevel = [];
     }
 
-    return <div className="treePage" onMouseDown={(e) => { console.log(e); toggleScrolling(true) }}>
+    return <div className="treePage" onMouseDown={(e) => toggleScrolling(true)}>
         <div className="treePageContent" style={{ top: scrollY, left: scrollX + window.innerWidth / 2 - 300 }}>
             <div className="treeKey">
                 <h2>Unit key</h2>

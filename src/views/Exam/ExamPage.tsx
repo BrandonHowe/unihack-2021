@@ -1,8 +1,8 @@
 import "./ExamPage.css";
 import { ITreeNode, tree } from "../TreePage/TreePage";
-import { MouseEventHandler, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
-import { findNodeByName, findParentNode } from "../../helpers";
+import { findNodeByName, findParentNode, genRandomArticle } from "../../helpers";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ReactMarkdown from "react-markdown";
 import RemarkMathPlugin from 'remark-math';
@@ -10,7 +10,6 @@ import rehypeKatex from "rehype-katex";
 import 'katex/dist/katex.min.css';
 import { Link, useParams } from "react-router-dom";
 import Markdown from "../../components/Markdown/Markdown";
-import LoremIpsum from "../Article/LoremIpsum";
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 import Icon from "@mdi/react";
 import ObservableSlim from "observable-slim";
@@ -22,6 +21,7 @@ interface Question {
     height: number;
     topic: ITreeNode;
     solution: string;
+    article: string;
     difficulty?: number;
     image?: string;
 }
@@ -41,58 +41,65 @@ Solve for x: $x = 1$
 const initialQuestions: Question[][][] = localStorage.getItem("questions") ? JSON.parse(localStorage.getItem("questions")!) : [
     [
         [
-            { x: 78, y: 170, width: 269, height: 21, solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
-            { x: 78, y: 192, width: 456, height: 42, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-            { x: 78, y: 234, width: 387, height: 21, solution: p3Solution, topic: findNodeByName("Logarithms")! },
-            { x: 78, y: 255, width: 456, height: 37, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-            { x: 78, y: 292, width: 456, height: 37, solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
-            { x: 78, y: 329, width: 348, height: 33, solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
-            { x: 78, y: 387, width: 447, height: 50, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-            { x: 78, y: 437, width: 138, height: 20, solution: "just solve it rofl", topic: findNodeByName("Determinants")! },
-            { x: 78, y: 457, width: 420, height: 23, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-            { x: 78, y: 480, width: 316, height: 20, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-            { x: 78, y: 505, width: 453, height: 28, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 533, width: 108, height: 15, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 548, width: 386, height: 14, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 562, width: 331, height: 23, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-            { x: 78, y: 608, width: 240, height: 27, solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
-            { x: 78, y: 635, width: 194, height: 42, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 673, width: 351, height: 19, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 692, width: 410, height: 51, solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
-            { x: 78, y: 743, width: 184, height: 37, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+            { x: 78, y: 170, width: 269, height: 21, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Complex numbers")! },
+            { x: 78, y: 192, width: 456, height: 42, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+            { x: 78, y: 234, width: 387, height: 21, article: genRandomArticle(), solution: p3Solution, topic: findNodeByName("Logarithms")! },
+            { x: 78, y: 255, width: 456, height: 37, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+            { x: 78, y: 292, width: 456, height: 37, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
+            { x: 78, y: 329, width: 348, height: 33, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
+            { x: 78, y: 387, width: 447, height: 50, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+            { x: 78, y: 437, width: 138, height: 20, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Determinants")! },
+            { x: 78, y: 457, width: 420, height: 23, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+            { x: 78, y: 480, width: 316, height: 20, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+            { x: 78, y: 505, width: 453, height: 28, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 533, width: 108, height: 15, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 548, width: 386, height: 14, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 562, width: 331, height: 23, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+            { x: 78, y: 608, width: 240, height: 27, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
+            { x: 78, y: 635, width: 194, height: 42, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 673, width: 351, height: 19, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 692, width: 410, height: 51, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
+            { x: 78, y: 743, width: 184, height: 37, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
         ],
         [
-            { x: 78, y: 42, width: 346, height: 36, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
-            { x: 78, y: 78, width: 460, height: 55, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+            { x: 78, y: 42, width: 346, height: 36, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+            { x: 78, y: 78, width: 460, height: 55, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
         ]
     ],
     [
         [
-            { x: 78, y: 185, width: 283 - 20, height: 25, solution: "just solve it rofl", topic: findNodeByName("Linear Equations")! },
-            { x: 78, y: 210, width: 493 - 20, height: 36, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-            { x: 78, y: 246, width: 329 - 20, height: 21, solution: "just solve it rofl", topic: findNodeByName("Exponentials")! },
-            { x: 78, y: 265, width: 485 - 20, height: 40, solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
-            { x: 78, y: 305, width: 490 - 20, height: 32, solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
-            { x: 78, y: 337, width: 471 - 20, height: 34, solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
-            { x: 78, y: 393, width: 396 - 20, height: 57, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-            { x: 78, y: 450, width: 439 - 20, height: 22, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-            { x: 78, y: 472, width: 341 - 20, height: 20, solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
-            { x: 78, y: 492, width: 475 - 20, height: 62, solution: "just solve it rofl", topic: findNodeByName("Linear Equations")! },
-            { x: 78, y: 554, width: 393 - 20, height: 38, solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
-            { x: 78, y: 592, width: 196 - 20, height: 30, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 648, width: 273 - 20, height: 70, solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
-            { x: 78, y: 718, width: 479 - 20, height: 32, solution: "just solve it rofl", topic: findNodeByName("Limits")! },
-            { x: 78, y: 750, width: 265 - 20, height: 20, solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
+            { x: 78, y: 185, width: 283 - 20, height: 25, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Linear Equations")! },
+            { x: 78, y: 210, width: 493 - 20, height: 36, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+            { x: 78, y: 246, width: 329 - 20, height: 21, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Exponentials")! },
+            { x: 78, y: 265, width: 485 - 20, height: 40, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Rational functions")! },
+            { x: 78, y: 305, width: 490 - 20, height: 32, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Geometry")! },
+            { x: 78, y: 337, width: 471 - 20, height: 34, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Trigonometry")! },
+            { x: 78, y: 393, width: 396 - 20, height: 57, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+            { x: 78, y: 450, width: 439 - 20, height: 22, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+            { x: 78, y: 472, width: 341 - 20, height: 20, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Matrices")! },
+            { x: 78, y: 492, width: 475 - 20, height: 62, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Linear Equations")! },
+            { x: 78, y: 554, width: 393 - 20, height: 38, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Quadratics")! },
+            { x: 78, y: 592, width: 196 - 20, height: 30, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 648, width: 273 - 20, height: 70, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
+            { x: 78, y: 718, width: 479 - 20, height: 32, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Limits")! },
+            { x: 78, y: 750, width: 265 - 20, height: 20, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Derivatives")! },
         ],
         [
-            { x: 78, y: 50, width: 242, height: 64, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
-            { x: 78, y: 114, width: 115, height: 46, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
-            { x: 78, y: 160, width: 180, height: 60, solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+            { x: 78, y: 50, width: 242, height: 64, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+            { x: 78, y: 114, width: 115, height: 46, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
+            { x: 78, y: 160, width: 180, height: 60, article: genRandomArticle(), solution: "just solve it rofl", topic: findNodeByName("Integrals")! },
         ]
     ]
 ];
 
 const emojiDifficulties = ["❌", "😭", "😢", "🙂", "😁"];
+const emojiDescriptions = {
+    "❌": "I didn't finish this problem",
+    "😭": "I couldn't solve this problem",
+    "😢": "I solved this problem with difficulty",
+    "🙂": "I solved this problem with little difficulty",
+    "😁": "I solved this problem easily"
+}
 
 const pointInRect = (point: { x: number, y: number }, rect: { x: number, y: number, width: number, height: number }) => {
     if (point.x < rect.x) return false;
@@ -110,10 +117,18 @@ const exams = [
 function EmojiDropdown({ value, setValue }: { value: string, setValue: (v: string) => void }) {
     const [opened, setOpened] = useState(false);
 
-    return <div className="emojiDropdown" style={{ height: opened ? 120 : 24, width: 24, border: "1px solid transparent", zIndex: opened ? 10 : 8 }}>
+    return <div className="emojiDropdown" style={{ height: opened ? 134 : 24, width: 150, paddingTop: 6, border: "1px solid transparent", zIndex: opened ? 10 : 8 }}>
         {/* <span style={{ position: "absolute", left: l.x - 20, top: l.y, color: "black" }}>{emojiDifficulties[l.difficulty || 0]}</span> */}
-        <div className="emojiDropdownChild" onClick={() => setOpened(!opened)}>{ value }</div>
-        { opened && emojiDifficulties.filter(l => l !== value).map(l => <div className="emojiDropdownChild" onClick={() => { setOpened(!opened); setValue(l) }}>{l}</div> )}
+        <div className="emojiDropdownChild" onClick={() => setOpened(!opened)}>
+            { value }
+            { opened && <div className="emojiDropdownTooltip">{emojiDescriptions[value]}</div> }
+        </div>
+        { opened && emojiDifficulties.filter(l => l !== value).map(l => (
+            <div className="emojiDropdownChild" onClick={() => { setOpened(!opened); setValue(l) }}>
+                {l}
+                <div className="emojiDropdownTooltip">{emojiDescriptions[l]}</div>
+            </div>
+        ))}
     </div>
 }
 
@@ -128,6 +143,10 @@ export default function ExamPage() {
     }));
 
     const documentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setSelectedQuestion(null);
+    }, [id]);
 
     const increasePage = () => {
         if (pageNumber < numPages) {
@@ -233,14 +252,14 @@ export default function ExamPage() {
                     </div>
                 </div>
                 { selectedQuestion && <div style={{ position: "absolute", left: selectedQuestion.x, top: selectedQuestion.y, width: selectedQuestion.width, height: selectedQuestion.height, backgroundColor: "rgba(177, 185, 249, 0.5)", borderRadius: 7 }}></div> }
-                { selectedQuestion && !questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).includes(selectedQuestion) && <div style={{ position: "absolute", left: selectedQuestion.x - 26, top: selectedQuestion.y, color: "black", width: 20 }}><EmojiDropdown value={emojiDifficulties[(selectedQuestion.difficulty ?? -1) + 1]} setValue={v => questionDifficulty(emojiDifficulties.indexOf(v) - 1) } /></div> }
-                { questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).map(l => <div style={{ position: "absolute", left: l.x - 26, top: l.y, color: "black", width: 20 }}><EmojiDropdown value={emojiDifficulties[(l.difficulty ?? -1) + 1]} setValue={v => questionDifficulty(emojiDifficulties.indexOf(v) - 1, l)} /></div>) }
+                { selectedQuestion && !questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).includes(selectedQuestion) && <div style={{ position: "absolute", left: selectedQuestion.x - 150, top: selectedQuestion.y - 6, color: "black", width: 20 }}><EmojiDropdown value={emojiDifficulties[(selectedQuestion.difficulty ?? -1) + 1]} setValue={v => questionDifficulty(emojiDifficulties.indexOf(v) - 1) } /></div> }
+                { numPages !== 0 && questions[Number(id) - 1][pageNumber - 1].filter(l => l.difficulty !== undefined).map(l => <div style={{ position: "absolute", left: l.x - 150, top: l.y - 6, color: "black", width: 20 }}><EmojiDropdown value={emojiDifficulties[(l.difficulty ?? -1) + 1]} setValue={v => questionDifficulty(emojiDifficulties.indexOf(v) - 1, l)} /></div>) }
             </div>
         </div>
         <div className="examContent">
             <h2>Additional help</h2>
             <div style={{ overflowY: "auto", height: `calc(100vh - 566px)` }}>
-                <Markdown content={LoremIpsum} />
+                <Markdown content={selectedQuestion?.article || ""} />
             </div>
             <div className="examContentButtons">
                 <Link to={currNode ? `/module/${currNode.name.split(" ").join("_")}` : ""} style={{ textDecoration: "none", color: "inherit" }}><div className="examContentButton">Check out similar exercises</div></Link>

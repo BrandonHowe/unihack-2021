@@ -41,7 +41,7 @@ export default function Question({ data, num, setAnswer }: { data: IQuestion, nu
                 { selectedCorrectAnswer && <h3 className="correctResponse">Correct!</h3> }
                 { !selectedCorrectAnswer && <>
                     <h3 className="incorrectResponse">Incorrect</h3>
-                    <p>{ data.answerChoices[selectedAnswer].explanation }</p>
+                    <Markdown content={ data.answerChoices[selectedAnswer].explanation }></Markdown>
                 </> }
             </div>
         }

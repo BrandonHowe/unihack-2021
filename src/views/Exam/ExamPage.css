@@ -253,11 +253,13 @@ a {
     transition: all 0.3s ease;
     overflow: hidden;
     position: relative;
+    direction: rtl;
 }
 
 .emojiDropdownChild {
     width: 24px;
     height: 24px;
+    position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
     background-color: white;
@@ -265,4 +267,22 @@ a {
 
 .emojiDropdownChild:hover {
     background-color: #bbb;
+}
+
+.emojiDropdownTooltip {
+    position: absolute;
+    visibility: hidden;
+    width: 120px;
+    background-color: #303135;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size: 12px;
+}
+
+.emojiDropdownChild:hover .emojiDropdownTooltip {
+    visibility: visible;
+    top: -5px;
+    right: 105%; 
 }
